@@ -25,3 +25,12 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+body::-webkit-scrollbar {
+  width: 0px;
+  scroll-behavior: smooth;
+}
+
+svg.star-svg {
+  display: inline;
+}
