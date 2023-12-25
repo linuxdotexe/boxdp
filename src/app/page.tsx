@@ -152,11 +152,17 @@ const Home = () => {
             </div>
           </article>
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              exportComponentAsPNG(myRef, {
-                html2CanvasOptions: { backgroundColor: null },
-              });
+            // onClick={(e) => {
+            //   e.preventDefault();
+            //   exportComponentAsPNG(myRef, {
+            //     html2CanvasOptions: { backgroundColor: null },
+            //   });
+            // }}
+            onClick={async () => {
+              const { exportComponentAsPNG } = await import(
+                "react-component-export-image"
+              );
+              exportComponentAsPNG(myRef);
             }}
             className="bg-sky-500 p-2 text-black font-bold text-2xl rounded m-auto justify-center items-center">
             Download
