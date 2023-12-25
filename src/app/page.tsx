@@ -84,8 +84,8 @@ const Home = () => {
           <span className="text-sky-400">ics</span>
         </h1>
         <p className="text-center text-wrap w-96 text-2xl">
-          Drop your review's link and click "Submit" to get a prettier image
-          version of it.
+          Drop your review&apos;s link and click &quot;Submit&quot; to get a
+          prettier image version of it.
         </p>
         {/* Input form */}
         <form
