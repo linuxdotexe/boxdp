@@ -122,7 +122,7 @@ const Home = () => {
         <div className="flex flex-row justify-evenly">
           <article
             ref={myRef}
-            className="m-auto flex min-h-screen flex-col justify-end w-[1440px] bg-slate-800"
+            className="m-auto flex min-h-screen flex-col justify-end w-[1440px] bg-slate-800 select-none"
             style={divStyle}
             id="review">
             <div className="bg-black bg-opacity-40 w-full p-12 h-[540px]">
