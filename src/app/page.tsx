@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState, ChangeEvent, FormEvent, useRef } from "react";
 import { Rating } from "react-simple-star-rating";
-import { exportComponentAsPNG } from "react-component-export-image";
 import React from "react";
 
 interface FormData {
@@ -27,12 +26,14 @@ interface ApiData {
 
 const BASE_URL =
   "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/review?blink=";
+const IMAGE_URL =
+  "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
 
 const Home = () => {
   const [apiData, setApiData] = useState<ApiData>();
   // TODO: Set this style in handleSubmit inside fetcher.
   const divStyle: React.CSSProperties = {
-    backgroundImage: `url("${apiData?.images[0]}")`,
+    backgroundImage: `url("${IMAGE_URL}${apiData?.images[0]}")`,
     backgroundSize: "cover",
     backgroundPosition: "center",
   };
@@ -77,46 +78,50 @@ const Home = () => {
   const myRef = useRef<HTMLElement | null>(null);
   return (
     <div>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-24">
-        <h1 className="text-7xl font-bold italic">
-          <span className="text-orange-400">box</span>
-          <span className="text-green-400">d-p</span>
-          <span className="text-sky-400">ics</span>
-        </h1>
-        <p className="text-center text-wrap w-96 text-2xl">
-          Drop your review&apos;s link and click &quot;Submit&quot; to get a
-          prettier image version of it.
-        </p>
-        {/* Input form */}
-        <form
-          className="flex flex-col items-center gap-4"
-          onSubmit={handleSubmit}>
-          <div className="w-full rounded-md bg-gradient-to-r from-orange-400 via-green-400 to-sky-400 p-0.5">
-            <input
-              value={formData.blink}
-              onChange={handleInputChange}
-              type="text"
-              name="blink"
-              required
-              autoFocus
-              placeholder="paste link here"
-              className="bg-neutral-950 p-2 rounded focus:outline-none w-80 text-center text-xl"
-            />
-          </div>
-          <div className="flex flex-row gap-4 justify-center items-center">
-            <button
-              type="submit"
-              className="bg-gradient-to-br from-orange-400 via-green-400 to-sky-400 p-2 text-black font-bold text-2xl rounded">
-              Submit!
-            </button>
-            <Link
-              href="#review"
-              className="bg-neutral-950 p-2 border-solid border-2 border-sky-400 text-2xl rounded animate-wiggle">
-              View Review!
-            </Link>
-          </div>
-        </form>
-        {/* Generated picture in a new page*/}
+      {/* <div className="opacity-50 blur bg-gradient-to-r from-orange-400 via-green-400 to-blue-400 w-full h-24 top-[-5px] z-0 absolute"></div>
+      <div className="absolute bg-gradient-to-t from-black w-full top-5 h-20"></div> */}
+      <div className="absolute blur w-screen h-screen z-[-10]"></div>
+      <main className="flex flex-col justify-center items-center min-h-screen z-10">
+        <div className="bg-neutral-900 border-solid border-2 border-sky-400 w-auto p-12 rounded-3xl items-center flex flex-col gap-4">
+          <h1 className="text-7xl font-bold italic">
+            <span className="text-orange-400">box</span>
+            <span className="text-green-400">d-p</span>
+            <span className="text-sky-400">ics</span>
+          </h1>
+          <p className="text-center text-wrap w-96 text-2xl">
+            Drop your review&apos;s link and click &quot;Submit&quot; to get a
+            prettier image version of it.
+          </p>
+          {/* Input form */}
+          <form
+            className="flex flex-col items-center gap-4"
+            onSubmit={handleSubmit}>
+            <div className="w-full rounded-md bg-gradient-to-r from-orange-400 via-green-400 to-sky-400 p-0.5">
+              <input
+                value={formData.blink}
+                onChange={handleInputChange}
+                type="text"
+                name="blink"
+                required
+                autoFocus
+                placeholder="paste link here"
+                className="bg-neutral-950 p-2 rounded focus:outline-none w-80 text-center text-xl"
+              />
+            </div>
+            <div className="flex flex-row gap-4 justify-center items-center">
+              <button
+                type="submit"
+                className="bg-gradient-to-br from-orange-400 via-green-400 to-sky-400 p-2 text-black font-bold text-2xl rounded">
+                Submit!
+              </button>
+              <Link
+                href="#review"
+                className="bg-neutral-950 p-2 border-solid border-2 border-sky-400 text-2xl rounded animate-wiggle">
+                View Review!
+              </Link>
+            </div>
+          </form>
+        </div>
       </main>
       {isVisible && (
         <div className="flex flex-row justify-evenly">
