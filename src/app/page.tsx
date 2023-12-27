@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useState, ChangeEvent, FormEvent, useRef } from "react";
 import { Rating } from "react-simple-star-rating";
 import React from "react";
+import Link from "next/link";
 
 interface FormData {
   blink: string;
@@ -124,13 +124,12 @@ const Home = () => {
         </div>
       </main>
       {isVisible && (
-        <div className="flex flex-row justify-evenly">
+        <div className="flex flex-row justify-evenly" id="review">
           <article
             ref={myRef}
-            className="m-auto flex min-h-screen flex-col justify-end w-[1440px] bg-slate-800 select-none"
-            style={divStyle}
-            id="review">
-            <div className="bg-black bg-opacity-40 w-full p-12 h-[540px]">
+            className="m-auto flex h-[1080px] flex-col justify-end w-[1440px] bg-slate-800 select-none"
+            style={divStyle}>
+            <div className="bg-black bg-opacity-50 w-full p-12 h-1/2">
               <p className="text-5xl font-bold pb-3">
                 {apiData?.filmName}
                 <sup className="pl-3 text-3xl">{apiData?.filmYear}</sup>
@@ -157,12 +156,6 @@ const Home = () => {
             </div>
           </article>
           <button
-            // onClick={(e) => {
-            //   e.preventDefault();
-            //   exportComponentAsPNG(myRef, {
-            //     html2CanvasOptions: { backgroundColor: null },
-            //   });
-            // }}
             onClick={async () => {
               const { exportComponentAsPNG } = await import(
                 "react-component-export-image"
