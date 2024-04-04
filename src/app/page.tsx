@@ -48,7 +48,7 @@ const Home = () => {
       })
       .then((res) => {
         setApiData(res);
-        setIsVisible(!isVisible);
+        setIsVisible(true);
         // console.log(apiData?.filmName);
       })
       .catch((error) => {
@@ -71,6 +71,7 @@ const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsVisible(false);
     fetcher(BASE_URL + formData.blink);
   };
   const fallBackImageUrl: string =
