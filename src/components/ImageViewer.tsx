@@ -23,7 +23,7 @@ export default function ImageViewer({ apiData, myRef, IMAGE_URL }: ImageViewerPr
         backgroundPosition: "center",
     };
     return (
-        <div className="flex flex-row justify-evenly" id="review">
+        <div className="bg-gradient-to-r from-orange-950 via-green-950 to-blue-950 flex flex-row justify-evenly" id="review">
             <article
                 ref={myRef}
                 className="m-auto flex h-[1080px] flex-col justify-end w-[1440px] bg-slate-800 select-none"

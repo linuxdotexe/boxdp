@@ -65,7 +65,7 @@ export default function Home() {
       {/* <div className="opacity-50 blur bg-gradient-to-r from-orange-400 via-green-400 to-blue-400 w-full h-24 top-[-5px] z-0 absolute"></div>
       <div className="absolute bg-gradient-to-t from-black w-full top-5 h-20"></div> */}
       {/* <div className="absolute blur w-screen h-screen z-[-10]"></div> */}
-      <main className="flex justify-center items-center min-h-screen z-10">
+      <main className="bg-gradient-to-r from-orange-950 via-green-950 to-blue-950 flex justify-center items-center min-h-screen z-10">
         <div className="bg-neutral-900 border-solid border-2 border-sky-400 w-min p-12 rounded-3xl items-center flex flex-col gap-4">
           <h1 className="text-7xl font-bold italic">
             <span className="text-orange-400">box</span>
