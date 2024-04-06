@@ -2,6 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent, useRef } from "react";
 import ApiData from "@/utils/ApiData";
+import ApiDataError from "@/utils/ApiDataError";
 import React from "react";
 import Link from "next/link";
 import ImageViewer from "@/components/ImageViewer";
@@ -11,35 +12,33 @@ interface FormData {
 }
 
 const BASE_URL =
-"https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/review?blink=";
+  "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/review?blink=";
 const IMAGE_URL =
-"https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
-const DEFAULT_REVIEW = 
-"https://letterboxd.com/raybean/film/puss-in-boots-the-last-wish/";
+  "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
+const DEFAULT_REVIEW =
+  "https://letterboxd.com/raybean/film/puss-in-boots-the-last-wish/";
+
+function fetcher(url: string, setApiData: (arg0: ApiData) => void, setIsVisible: (arg0: boolean) => void) {
+  fetch(url, { method: "GET" })
+    .then((response) => {
+      return response.json();
+    })
+    .then((res: ApiData | ApiDataError) => {
+      if ("error" in res) {
+        throw res;
+      }
+      setApiData(res);
+      setIsVisible(true);
+    })
+    .catch((error: ApiDataError) => {
+      console.error(error);
+    });
+}
 
 export default function Home() {
   const [apiData, setApiData] = useState<ApiData | null>(null);
   const myRef = useRef<HTMLElement | null>(null);
-  
-  function fetcher(url: string) {
-    fetch(url, { method: "GET" })
-      .then((response) => {
-        console.log(response);
-        if (response.ok) {
-          console.log(response.url);
-          return response.json();
-        }
-        return Promise.reject(response);
-      })
-      .then((res) => {
-        setApiData(res);
-        setIsVisible(true);
-        // console.log(apiData?.filmName);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+
   const [formData, setFormData] = useState<FormData>({
     blink: "",
   });
@@ -57,7 +56,7 @@ export default function Home() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsVisible(false);
-    fetcher(BASE_URL + formData.blink);
+    fetcher(BASE_URL + formData.blink, (arg0) => setApiData(arg0), (arg0) => setIsVisible(arg0));
   };
   const fallBackImageUrl: string =
     "https://a.ltrbxd.com/resized/sm/upload/b0/iz/eb/dq/fight-club-1920-1920-1080-1080-crop-000000.jpg?v=1e6ef6695e";
