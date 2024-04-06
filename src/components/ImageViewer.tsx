@@ -4,26 +4,31 @@ import { ExportComponentReturn, Params } from "react-component-export-image";
 let exportComponentAsPNG: ((node: RefObject<ReactInstance>, params?: Params | undefined) => ExportComponentReturn) | undefined;
 
 import ApiData from '@/utils/ApiData';
-import { RefObject, ReactInstance } from "react";
+import { RefObject, ReactInstance, useState, ChangeEvent } from "react";
 
 interface ImageViewerProps {
-    apiData: ApiData | null;
+    apiData: ApiData;
     myRef: React.MutableRefObject<HTMLElement | null>;
     BASE_URL?: string;
     IMAGE_URL: string;
 }
-export default function ImageViewer({ apiData, myRef, IMAGE_URL }: ImageViewerProps) {
-    if (apiData === null)
-        return (<p>lamao</p>);
 
+
+export default function ImageViewer({ apiData, myRef, IMAGE_URL }: ImageViewerProps) {
+    const [numberInputValue, setNumberInputValue] = useState('1');
+
+    function handleNumberInputChange(event: ChangeEvent<HTMLInputElement>) {
+        const newValue = event.target.validity.valid ? event.target.value.replace(/\D/, '') : numberInputValue;
+        setNumberInputValue(newValue);
+    }
     // TODO: Set this style in handleSubmit inside fetcher.
     const divStyle: React.CSSProperties = {
-        backgroundImage: `url("${IMAGE_URL}${apiData?.images[0]}")`,
+        backgroundImage: `url("${IMAGE_URL}${apiData?.images[parseInt(numberInputValue) - 1]}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
     };
     return (
-        <div className="bg-gradient-to-r from-orange-950 via-green-950 to-blue-950 flex flex-row justify-evenly" id="review">
+        <div className="flex flex-col justify-evenly" id="review">
             <article
                 ref={myRef}
                 className="m-auto flex h-[1080px] flex-col justify-end w-[1440px] bg-slate-800 select-none"
@@ -50,28 +55,50 @@ export default function ImageViewer({ apiData, myRef, IMAGE_URL }: ImageViewerPr
                         />
                     )}
                     <p className="font-semibold text-3xl w-[810px] pt-3">
-                        {apiData?.reviewDesc}
+                        {apiData?.reviewContent}
                     </p>
                 </div>
             </article>
-            <button
-                onClick={async () => {
-                    if (!exportComponentAsPNG) {
-                        exportComponentAsPNG = (await import("react-component-export-image")).exportComponentAsPNG;
-                    }
-                    /*
-                    exportComponentAsPNG(myRef, {
-                        html2CanvasOptions: {
-                            width: 1440,
-                            height: 1080,
+            <div className="flex flex-row justify-around">
+                <div className="flex flex-col m-10 h-50">
+                    <label
+                        className="bg-orange-600 rounded-t text-center m-0 p-0"
+                        htmlFor="numberInput"
+                    >
+                        Pick an Image
+                    </label>
+                    <input
+                        className="bg-orange-500 m-0 p-0 text-black font-bold text-2xl rounded-b justify-center text-center placeholder-gray-300"
+                        id="numberInput"
+                        name="numberInput"
+                        type="number"
+                        min={1}
+                        max={apiData?.images.length}
+                        value={numberInputValue}
+                        onChange={handleNumberInputChange}
+                        placeholder={"-"+String(apiData?.images.length)+"-"}
+                    />
+                </div>
+                <button
+                    className="bg-sky-500 p-2 text-black font-bold text-2xl rounded max-w-max m-10 justify-center text-center h-50 shadow-2xl"
+                    onClick={async () => {
+                        if (!exportComponentAsPNG) {
+                            exportComponentAsPNG = (await import("react-component-export-image")).exportComponentAsPNG;
                         }
-                    });
-                    */
-                    exportComponentAsPNG(myRef);
-                }}
-                className="bg-sky-500 p-2 text-black font-bold text-2xl rounded m-auto justify-center items-center">
-                Download
-            </button>
+                        /*
+                        exportComponentAsPNG(myRef, {
+                            html2CanvasOptions: {
+                                width: 1440,
+                                height: 1080,
+                            }
+                        });
+                        */
+                        exportComponentAsPNG(myRef);
+                    }}
+                >
+                    Download
+                </button>
+            </div>
         </div>
     );
 };
