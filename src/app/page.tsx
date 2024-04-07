@@ -1,12 +1,19 @@
 "use client";
 
-import { useState, useRef } from "react";
-
-import ApiData from "@/utils/ApiData";
-import ApiDataError from "@/utils/ApiDataError";
+import { useState, useRef, Suspense } from "react";
 
 import ImageViewer from "@/components/ImageViewer";
 import SearchBox from "@/components/SearchBox";
+
+/*
+import dynamic from "next/dynamic";
+const ImageViewer = dynamic(() => import('@/components/ImageViewer'), {
+  loading: () => <p>ImageViewer Loading...</p>,
+});
+const SearchBox = dynamic(() => import('@/components/SearchBox'), {
+  loading: () => <p>SearchBox Loading...</p>,
+});
+*/
 
 const BASE_URL =
   "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/review?blink=";
@@ -17,41 +24,24 @@ const DEFAULT_REVIEW =
 
 
 export default function Home() {
-  const [apiData, setApiData] = useState<ApiData | null>(null);
+  // const [apiData, setApiData] = useState<ApiData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [queryURL, setQueryURL] = useState("");
 
   const myRef = useRef<HTMLElement | null>(null);
 
-  function fetcher(url: string) {
-    setApiData(null);
-    setIsFetching(true);
-    fetch(url, { method: "GET" })
-      .then((response) => {
-        setIsFetching(false);
-        return response.json();
-      })
-      .then((res: ApiData | ApiDataError) => {
-        if ("error" in res) {
-          throw res;
-        }
-        setApiData(res);
-        setIsVisible(true);
-      })
-      .catch((error: ApiDataError) => {
-        console.error(error);
-      });
-  }
+  
 
   return (
     <div className="flex-1 bg-gradient-to-r from-orange-950 via-green-950 to-blue-950">
 
-      <SearchBox isFetching={isFetching} setIsVisible={setIsVisible} fetcher={fetcher} BASE_URL={BASE_URL} />
+      <SearchBox setIsVisible={setIsVisible} setQueryURL={setQueryURL} myRef={myRef} isFetching={isFetching} BASE_URL={BASE_URL} />
 
-      {isVisible &&
-        (apiData ?
-
-          <ImageViewer apiData={apiData} myRef={myRef} IMAGE_URL={IMAGE_URL} /> :
+      {(isVisible ?
+        <Suspense fallback={<h1 className="text-7xl bg-transparent font-bold">HELLO BRO</h1>}>
+          <ImageViewer setIsFetching={setIsFetching} queryURL={queryURL} myRef={myRef} IMAGE_URL={IMAGE_URL} />
+        </Suspense> :
 
           <div className="flex justify-center p-10">
             <h1 className="text-7xl bg-transparent font-bold">

@@ -1,21 +1,51 @@
 import { Rating } from "react-simple-star-rating";
 import { ExportComponentReturn, Params } from "react-component-export-image";
+import { GetStaticProps } from "next";
 
 let exportComponentAsPNG: ((node: RefObject<ReactInstance>, params?: Params | undefined) => ExportComponentReturn) | undefined;
 
 import ApiData from '@/utils/ApiData';
-import { RefObject, ReactInstance, useState, ChangeEvent } from "react";
+import { RefObject, ReactInstance, useState, ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
+import ApiDataError from "@/utils/ApiDataError";
 
 interface ImageViewerProps {
-    apiData: ApiData;
+    queryURL: string;
     myRef: React.MutableRefObject<HTMLElement | null>;
     BASE_URL?: string;
     IMAGE_URL: string;
+    setIsFetching: Dispatch<SetStateAction<boolean>>;
 }
 
-
-export default function ImageViewer({ apiData, myRef, IMAGE_URL }: ImageViewerProps) {
+export default function ImageViewer({ setIsFetching, queryURL, myRef, IMAGE_URL }: ImageViewerProps) {
     const [numberInputValue, setNumberInputValue] = useState('1');
+    const [apiData, setApiData] = useState<ApiData | null>(null);
+
+    function fetcher(url: string) {
+        setApiData(null);
+        setIsFetching(true);
+        fetch(url, { method: "GET" })
+            .then((response) => {
+                setIsFetching(false);
+                return response.json();
+            })
+            .then((res: ApiData | ApiDataError) => {
+                if ("error" in res) {
+                    throw res;
+                }
+                setApiData(res);
+                // setIsVisible(true);
+            })
+            .catch((error: ApiDataError) => {
+                console.error(error);
+            });
+    }
+
+    useEffect(() => {
+        fetcher(queryURL);
+        return () => {
+            console.log("cleanup");
+        }
+    }, [queryURL]);
 
     function handleNumberInputChange(event: ChangeEvent<HTMLInputElement>) {
         const newValue = event.target.validity.valid ? event.target.value.replace(/\D/, '') : numberInputValue;
@@ -76,7 +106,7 @@ export default function ImageViewer({ apiData, myRef, IMAGE_URL }: ImageViewerPr
                         max={apiData?.images.length}
                         value={numberInputValue}
                         onChange={handleNumberInputChange}
-                        placeholder={"-"+String(apiData?.images.length)+"-"}
+                        placeholder={"-" + String(apiData?.images.length) + "-"}
                     />
                 </div>
                 <button
