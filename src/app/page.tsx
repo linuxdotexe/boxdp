@@ -4,7 +4,7 @@ import { useState, useRef, Suspense } from "react";
 
 import ImageViewer from "@/components/ImageViewer";
 import SearchBox from "@/components/SearchBox";
-
+export const dynamic = 'force-dynamic';
 /*
 import dynamic from "next/dynamic";
 const ImageViewer = dynamic(() => import('@/components/ImageViewer'), {
@@ -25,32 +25,31 @@ const DEFAULT_REVIEW =
 
 export default function Home() {
   // const [apiData, setApiData] = useState<ApiData | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [queryURL, setQueryURL] = useState("");
 
-  const myRef = useRef<HTMLElement | null>(null);
 
-  
+
 
   return (
     <div className="flex-1 bg-gradient-to-r from-orange-950 via-green-950 to-blue-950">
 
-      <SearchBox setIsVisible={setIsVisible} setQueryURL={setQueryURL} myRef={myRef} isFetching={isFetching} BASE_URL={BASE_URL} />
+      <SearchBox setQueryURL={setQueryURL} isFetching={isFetching} />
 
       {(isVisible ?
         <Suspense fallback={<h1 className="text-7xl bg-transparent font-bold">HELLO BRO</h1>}>
-          <ImageViewer setIsFetching={setIsFetching} queryURL={queryURL} myRef={myRef} IMAGE_URL={IMAGE_URL} />
+          <ImageViewer setIsFetching={setIsFetching} />
         </Suspense> :
 
-          <div className="flex justify-center p-10">
-            <h1 className="text-7xl bg-transparent font-bold">
-              {isFetching ?
-                "Holup! We're cooking..." :
-                "Looks like you messed up the url..."}
-            </h1>
-          </div>
-        )
+        <div className="flex justify-center p-10">
+          <h1 className="text-7xl bg-transparent font-bold">
+            {isFetching ?
+              "Holup! We're cooking..." :
+              "Looks like you messed up the url..."}
+          </h1>
+        </div>
+      )
       }
     </div>
   );

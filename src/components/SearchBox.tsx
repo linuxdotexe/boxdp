@@ -2,22 +2,24 @@ import ApiData from "@/utils/ApiData";
 import FormData from "@/utils/FormData";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from "react";
 
 interface SearchBoxProps {
 	// fetcher: (url: string) => void,
 	apiData?: ApiData | null,
 	setApiData?: Dispatch<SetStateAction<ApiData | null>>,
-	setIsVisible: Dispatch<SetStateAction<boolean>>,
+	setIsVisible?: Dispatch<SetStateAction<boolean>>,
 	isFetching: boolean,
 	BASE_URL?:	string,
 	IMAGE_URL?: string,
-	myRef: React.MutableRefObject<HTMLElement | null>,
+	myRef?: React.MutableRefObject<HTMLElement | null>,
 	setQueryURL: Dispatch<SetStateAction<string>>,
 }
 
 
-export default function SearchBox({ setIsVisible, setQueryURL, myRef, isFetching, BASE_URL }: SearchBoxProps) {
+export default function SearchBox({ isFetching }: SearchBoxProps) {
+	const router = useRouter();
 
 	const [formData, setFormData] = useState<FormData>({
 		blink: "",
@@ -33,9 +35,9 @@ export default function SearchBox({ setIsVisible, setQueryURL, myRef, isFetching
 			return;
 
 		}
-		console.log(BASE_URL + url);
-		setQueryURL(BASE_URL + url);
-		setIsVisible(true);
+		router.push(`/?url=${url}&img=1`);
+		// console.log(BASE_URL + url);
+		// setQueryURL(BASE_URL + url);
 		// fetcher(BASE_URL + formData.blink);
 	};
 

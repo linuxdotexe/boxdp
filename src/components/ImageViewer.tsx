@@ -1,24 +1,36 @@
 import { Rating } from "react-simple-star-rating";
 import { ExportComponentReturn, Params } from "react-component-export-image";
-import { GetStaticProps } from "next";
+import { useSearchParams } from 'next/navigation';
 
 let exportComponentAsPNG: ((node: RefObject<ReactInstance>, params?: Params | undefined) => ExportComponentReturn) | undefined;
 
 import ApiData from '@/utils/ApiData';
-import { RefObject, ReactInstance, useState, ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
+import { RefObject, ReactInstance, useState, ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
 import ApiDataError from "@/utils/ApiDataError";
 
 interface ImageViewerProps {
-    queryURL: string;
-    myRef: React.MutableRefObject<HTMLElement | null>;
+    queryURL?: string | null;
+    myRef?: React.MutableRefObject<HTMLElement | null>;
     BASE_URL?: string;
-    IMAGE_URL: string;
+    IMAGE_URL?: string;
     setIsFetching: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function ImageViewer({ setIsFetching, queryURL, myRef, IMAGE_URL }: ImageViewerProps) {
+const BASE_URL =
+    "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/review?blink=";
+const IMAGE_URL =
+    "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
+
+export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
+    const searchParams = useSearchParams();
+
+    // console.log(queryURL)
     const [numberInputValue, setNumberInputValue] = useState('1');
     const [apiData, setApiData] = useState<ApiData | null>(null);
+    const myRef = useRef<HTMLElement | null>(null);
+
+    // if (!searchParams.get('url'))
+    //     return (<h1>Boo Hoo!</h1>);
 
     function fetcher(url: string) {
         setApiData(null);
@@ -41,11 +53,18 @@ export default function ImageViewer({ setIsFetching, queryURL, myRef, IMAGE_URL 
     }
 
     useEffect(() => {
-        fetcher(queryURL);
+        // console.log(queryURL);
+        // console.log(BASE_URL + queryURL);
+        if(searchParams.get('url') === null){
+            return () => {
+                console.log("none happened");
+            }
+        }
+        fetcher(BASE_URL + searchParams.get('url'));
         return () => {
             console.log("cleanup");
         }
-    }, [queryURL]);
+    }, [searchParams.get('url')]);
 
     function handleNumberInputChange(event: ChangeEvent<HTMLInputElement>) {
         const newValue = event.target.validity.valid ? event.target.value.replace(/\D/, '') : numberInputValue;
@@ -61,7 +80,7 @@ export default function ImageViewer({ setIsFetching, queryURL, myRef, IMAGE_URL 
         <div className="flex flex-col justify-evenly" id="review">
             <article
                 ref={myRef}
-                className="m-auto flex h-[1080px] flex-col justify-end w-[1440px] bg-slate-800 select-none"
+                className="m-auto flex 2xl:h-[1080px] 2xl:w-[1440px] h-[720px] w-[960px] flex-col justify-end bg-slate-800 select-none"
                 style={divStyle}>
                 <div className="bg-black bg-opacity-50 w-full p-12 h-1/2">
                     <p className="text-5xl font-bold pb-3">
