@@ -27,7 +27,6 @@ export default function Home() {
   // const [apiData, setApiData] = useState<ApiData | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-  const [queryURL, setQueryURL] = useState("");
 
 
 
@@ -35,7 +34,7 @@ export default function Home() {
   return (
     <div className="flex-1 bg-gradient-to-r from-orange-950 via-green-950 to-blue-950">
 
-      <SearchBox setQueryURL={setQueryURL} isFetching={isFetching} />
+      <SearchBox isFetching={isFetching} />
 
       {(isVisible ?
         <Suspense fallback={<h1 className="text-7xl bg-transparent font-bold">HELLO BRO</h1>}>

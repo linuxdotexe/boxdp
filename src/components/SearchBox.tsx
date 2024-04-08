@@ -14,7 +14,7 @@ interface SearchBoxProps {
 	BASE_URL?:	string,
 	IMAGE_URL?: string,
 	myRef?: React.MutableRefObject<HTMLElement | null>,
-	setQueryURL: Dispatch<SetStateAction<string>>,
+	setQueryURL?: Dispatch<SetStateAction<string>>,
 }
 
 
@@ -35,7 +35,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
 			return;
 
 		}
-		router.push(`/?url=${url}&img=1`);
+		router.push(`/?url=${url}&img=1#review`);
 		// console.log(BASE_URL + url);
 		// setQueryURL(BASE_URL + url);
 		// fetcher(BASE_URL + formData.blink);
