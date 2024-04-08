@@ -1,11 +1,12 @@
 import { Rating } from "react-simple-star-rating";
 import { ExportComponentReturn, Params } from "react-component-export-image";
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 let exportComponentAsPNG: ((node: RefObject<ReactInstance>, params?: Params | undefined) => ExportComponentReturn) | undefined;
 
 import ApiData from '@/utils/ApiData';
-import { RefObject, ReactInstance, useState, ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { RefObject, ReactInstance, useState, Dispatch, SetStateAction, useEffect, useRef } from "react";
 import ApiDataError from "@/utils/ApiDataError";
 
 interface ImageViewerProps {
@@ -21,21 +22,37 @@ const BASE_URL =
 const IMAGE_URL =
     "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
 
-export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
-    const searchParams = useSearchParams();
 
-    // console.log(queryURL)
-    const [numberInputValue, setNumberInputValue] = useState('1');
+
+// -------- FUNCTION ---------
+export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
     const [apiData, setApiData] = useState<ApiData | null>(null);
     const myRef = useRef<HTMLElement | null>(null);
 
-    // if (!searchParams.get('url'))
-    //     return (<h1>Boo Hoo!</h1>);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    
+    const queryURL = searchParams.get('url');
+    const parsedImgNum = parseInt(searchParams.get('img') as string);
+    let curImgNum = !Number.isNaN(parsedImgNum) ? (apiData?.images.length ? Math.max(1, Math.min(parsedImgNum, apiData.images.length)) : 1) : 1;   // please make this nicer
 
+
+    
+    // if (!searchParams.get('url'))
+        //     return (<h1>Boo Hoo!</h1>);
+
+    function handleImgNumDecr() {
+        router.push(`/?url=${queryURL}&img=${Math.max(curImgNum-1, 1)}`, { scroll: false });
+    }
+    function handleImgNumIncr() {
+        router.push(`/?url=${queryURL}&img=${Math.min(curImgNum+1, apiData?.images.length || 1)}`, { scroll: false });
+    }
+    
     function fetcher(url: string) {
-        setApiData(null);
-        setIsFetching(true);
-        fetch(url, { method: "GET" })
+        return new Promise<void>((resolve, reject) => {
+            setApiData(null);
+            setIsFetching(true);
+            fetch(url, { method: "GET" })
             .then((response) => {
                 setIsFetching(false);
                 return response.json();
@@ -45,34 +62,32 @@ export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
                     throw res;
                 }
                 setApiData(res);
+                resolve();
                 // setIsVisible(true);
             })
             .catch((error: ApiDataError) => {
+                reject(error);
                 console.error(error);
             });
+        });
+        
     }
 
     useEffect(() => {
-        // console.log(queryURL);
-        // console.log(BASE_URL + queryURL);
-        if(searchParams.get('url') === null){
+        if (queryURL === null) {
             return () => {
                 console.log("none happened");
             }
         }
-        fetcher(BASE_URL + searchParams.get('url'));
+        fetcher(BASE_URL + queryURL);
         return () => {
             console.log("cleanup");
         }
-    }, [searchParams.get('url')]);
+    }, [queryURL]);
 
-    function handleNumberInputChange(event: ChangeEvent<HTMLInputElement>) {
-        const newValue = event.target.validity.valid ? event.target.value.replace(/\D/, '') : numberInputValue;
-        setNumberInputValue(newValue);
-    }
     // TODO: Set this style in handleSubmit inside fetcher.
     const divStyle: React.CSSProperties = {
-        backgroundImage: `url("${IMAGE_URL}${apiData?.images[parseInt(numberInputValue) - 1]}")`,
+        backgroundImage: `url("${IMAGE_URL}${apiData?.images[curImgNum - 1]}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
     };
@@ -109,25 +124,34 @@ export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
                 </div>
             </article>
             <div className="flex flex-row justify-around">
-                <div className="flex flex-col m-10 h-50">
+                
+                <div className="flex flex-col m-10 h-50 max-w-max">
                     <label
-                        className="bg-orange-600 rounded-t text-center m-0 p-0"
-                        htmlFor="numberInput"
+                        className="bg-orange-600 rounded-t text-center m-0 p-2"
                     >
                         Pick an Image
                     </label>
-                    <input
-                        className="bg-orange-500 m-0 p-0 text-black font-bold text-2xl rounded-b justify-center text-center placeholder-gray-300"
-                        id="numberInput"
-                        name="numberInput"
-                        type="number"
-                        min={1}
-                        max={apiData?.images.length}
-                        value={numberInputValue}
-                        onChange={handleNumberInputChange}
-                        placeholder={"-" + String(apiData?.images.length) + "-"}
-                    />
+                    <div className="flex bg-orange-500 p-0 text-black font-bold text-2xl rounded-b m-0 justify-between text-center h-50 shadow-2xl">
+                        <button
+                            className="bg-orange-300 p-2 rounded-bl w-10"
+                            title="prev"
+                            onClick={handleImgNumDecr}
+                        >
+                            {'<'}
+                        </button>
+                        <p className="text-center justify-center flex flex-col">
+                            {curImgNum}
+                        </p>
+                        <button
+                            className="bg-orange-300 p-2 rounded-br w-10"
+                            title="next"
+                            onClick={handleImgNumIncr}
+                        >
+                            {'>'}
+                        </button>
+                    </div>
                 </div>
+
                 <button
                     className="bg-sky-500 p-2 text-black font-bold text-2xl rounded max-w-max m-10 justify-center text-center h-50 shadow-2xl"
                     onClick={async () => {

@@ -25,7 +25,6 @@ const DEFAULT_REVIEW =
 
 export default function Home() {
   // const [apiData, setApiData] = useState<ApiData | null>(null);
-  const [isVisible, setIsVisible] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
 
 
@@ -36,20 +35,9 @@ export default function Home() {
 
       <SearchBox isFetching={isFetching} />
 
-      {(isVisible ?
-        <Suspense fallback={<h1 className="text-7xl bg-transparent font-bold">HELLO BRO</h1>}>
-          <ImageViewer setIsFetching={setIsFetching} />
-        </Suspense> :
-
-        <div className="flex justify-center p-10">
-          <h1 className="text-7xl bg-transparent font-bold">
-            {isFetching ?
-              "Holup! We're cooking..." :
-              "Looks like you messed up the url..."}
-          </h1>
-        </div>
-      )
-      }
+      <Suspense fallback={<h1 className="text-7xl bg-transparent font-bold">HELLO BRO</h1>}>
+        <ImageViewer setIsFetching={setIsFetching} />
+      </Suspense>
     </div>
   );
 };
