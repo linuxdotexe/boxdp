@@ -31,13 +31,11 @@ export default function Home() {
 
 
   return (
-    <div className="flex-1 bg-gradient-to-r from-orange-950 via-green-950 to-blue-950">
+    <div className="flex-1 flex flex-col align-center items-center justify-center bg-gradient-to-r from-orange-950 via-green-950 to-blue-950">
 
       <SearchBox isFetching={isFetching} />
 
-      <Suspense fallback={<h1 className="text-7xl bg-transparent font-bold">HELLO BRO</h1>}>
-        <ImageViewer setIsFetching={setIsFetching} />
-      </Suspense>
+      <ImageViewer setIsFetching={setIsFetching} />
     </div>
   );
 };

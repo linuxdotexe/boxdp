@@ -8,6 +8,7 @@ let exportComponentAsPNG: ((node: RefObject<ReactInstance>, params?: Params | un
 import ApiData from '@/utils/ApiData';
 import { RefObject, ReactInstance, useState, Dispatch, SetStateAction, useEffect, useRef } from "react";
 import ApiDataError from "@/utils/ApiDataError";
+import LoadingImageViewer from "./LoadingImageViewer";
 
 interface ImageViewerProps {
     queryURL?: string | null;
@@ -79,12 +80,24 @@ export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
                 console.log("none happened");
             }
         }
-        fetcher(BASE_URL + queryURL);
+
+        fetcher(BASE_URL + queryURL)
+        .then(res => {
+            console.log('fetch success')
+        })
+        .catch(err => {
+            console.error('fetchfail:', err)
+        });
+
         return () => {
             console.log("cleanup");
         }
     }, [queryURL]);
 
+    // --------- LOADING UI -----------
+    if(!apiData) {
+        return (<LoadingImageViewer />);
+    }
     // TODO: Set this style in handleSubmit inside fetcher.
     const divStyle: React.CSSProperties = {
         backgroundImage: `url("${IMAGE_URL}${apiData?.images[curImgNum - 1]}")`,
@@ -124,10 +137,11 @@ export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
                 </div>
             </article>
             <div className="flex flex-row justify-around">
-                
+
                 <div className="flex flex-col m-10 h-50 max-w-max">
                     <label
                         className="bg-orange-600 rounded-t text-center m-0 p-2"
+                        title={String(apiData?.images.length)}
                     >
                         Pick an Image
                     </label>
