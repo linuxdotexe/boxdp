@@ -20,23 +20,25 @@ export default function LoadingImageViewer() {
 
                     <div className="flex flex-col m-10 h-50 max-w-max">
                         <label
-                            className="bg-orange-600 rounded-t text-center m-0 p-2"
+                            className="bg-gray-600 rounded-t text-center m-0 p-2"
                         >
                             Pick an Image
                         </label>
-                        <div className="flex bg-orange-500 p-0 text-black font-bold text-2xl rounded-b m-0 justify-between text-center h-50 shadow-2xl">
+                        <div className="flex bg-gray-500 p-0 text-white font-bold text-2xl rounded-b m-0 justify-between text-center h-50 shadow-2xl">
                             <button
-                                className="bg-orange-300 p-2 rounded-bl w-10"
+                                className="bg-gray-300 p-2 rounded-bl w-10"
                                 title="prev"
+                                disabled={true}
                             >
                                 {'<'}
                             </button>
                             <p className="text-center justify-center flex flex-col">
-                                {0}
+                                {'-'}
                             </p>
                             <button
-                                className="bg-orange-300 p-2 rounded-br w-10"
+                                className="bg-gray-300 p-2 rounded-br w-10"
                                 title="next"
+                                disabled={true}
                             >
                                 {'>'}
                             </button>
@@ -44,7 +46,8 @@ export default function LoadingImageViewer() {
                     </div>
 
                     <button
-                        className="bg-sky-500 p-2 text-black font-bold text-2xl rounded max-w-max m-10 justify-center text-center h-50 shadow-2xl"
+                        className="bg-gray-500 p-2 text-white font-bold text-2xl rounded max-w-max m-10 justify-center text-center h-50 shadow-2xl"
+                        disabled={true}
                     >
                         Download
                     </button>
