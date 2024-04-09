@@ -9,12 +9,14 @@ import ApiData from '@/utils/ApiData';
 import { RefObject, ReactInstance, useState, Dispatch, SetStateAction, useEffect, useRef } from "react";
 import ApiDataError from "@/utils/ApiDataError";
 import LoadingImageViewer from "./LoadingImageViewer";
+import ErrorImageViewer from "./ErrorImageViewer";
 
 interface ImageViewerProps {
     queryURL?: string | null;
     myRef?: React.MutableRefObject<HTMLElement | null>;
     BASE_URL?: string;
     IMAGE_URL?: string;
+    isFetching?: boolean;
     setIsFetching: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -26,52 +28,39 @@ const IMAGE_URL =
 
 
 // -------- FUNCTION ---------
-export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
-    const [apiData, setApiData] = useState<ApiData | null>(null);
+export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerProps) {
+    const [apiData, setApiData] = useState<ApiData | ApiDataError | null>(null);
     const myRef = useRef<HTMLElement | null>(null);
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    
     const queryURL = searchParams.get('url');
-    const parsedImgNum = parseInt(searchParams.get('img') as string);
-    let curImgNum = !Number.isNaN(parsedImgNum) ? (apiData?.images.length ? Math.max(1, Math.min(parsedImgNum, apiData.images.length)) : 1) : 1;   // please make this nicer
 
-
-    
-    // if (!searchParams.get('url'))
-        //     return (<h1>Boo Hoo!</h1>);
-
-    function handleImgNumDecr() {
-        router.push(`/?url=${queryURL}&img=${Math.max(curImgNum-1, 1)}`, { scroll: false });
-    }
-    function handleImgNumIncr() {
-        router.push(`/?url=${queryURL}&img=${Math.min(curImgNum+1, apiData?.images.length || 1)}`, { scroll: false });
-    }
-    
     function fetcher(url: string) {
-        return new Promise<void>((resolve, reject) => {
-            setApiData(null);
+        return new Promise<ApiData | ApiDataError>((resolve, reject) => {
+
             setIsFetching(true);
             fetch(url, { method: "GET" })
-            .then((response) => {
-                setIsFetching(false);
-                return response.json();
-            })
-            .then((res: ApiData | ApiDataError) => {
-                if ("error" in res) {
-                    throw res;
-                }
-                setApiData(res);
-                resolve();
-                // setIsVisible(true);
-            })
-            .catch((error: ApiDataError) => {
-                reject(error);
-                console.error(error);
-            });
+                .then((response) => {
+                    return response.json();
+                })
+                .then((res: ApiData | ApiDataError) => {
+                    if ("error" in res) {
+                        throw res;
+                    }
+
+                    resolve(res as ApiData);
+                    // setIsVisible(true);
+                })
+                .catch((error: ApiDataError) => {
+                    reject(error as ApiDataError);
+                    console.error(error);
+                })
+                .finally(() => {
+                    setIsFetching(false);
+                });
         });
-        
+
     }
 
     useEffect(() => {
@@ -80,24 +69,49 @@ export default function ImageViewer({ setIsFetching }: ImageViewerProps) {
                 console.log("none happened");
             }
         }
-
+        setApiData(null);
         fetcher(BASE_URL + queryURL)
-        .then(res => {
-            console.log('fetch success')
-        })
-        .catch(err => {
-            console.error('fetchfail:', err)
-        });
+            .then(res => {
+                setApiData(res);
+                console.log('fetch success')
+            })
+            .catch(err => {
+                setApiData(err)
+                console.error('fetchfail:', err)
+            });
 
         return () => {
             console.log("cleanup");
         }
     }, [queryURL]);
 
-    // --------- LOADING UI -----------
-    if(!apiData) {
+    if (isFetching) {
         return (<LoadingImageViewer />);
     }
+    if(apiData === null) {
+        return (<></>)
+    }
+    if ("error" in apiData) {
+        return (<ErrorImageViewer />);
+    }
+    
+    const parsedImgNum = parseInt(searchParams.get('img') as string);
+    let curImgNum = !Number.isNaN(parsedImgNum) ? (apiData?.images.length ? Math.max(1, Math.min(parsedImgNum, apiData.images.length)) : 1) : 1;   // please make this nicer
+
+
+
+    // if (!searchParams.get('url'))
+    //     return (<h1>Boo Hoo!</h1>);
+
+    const handleImgNumDecr = () => {
+        router.push(`/?url=${queryURL}&img=${Math.max(curImgNum - 1, 1)}`, { scroll: false });
+    }
+    const handleImgNumIncr = () => {
+        router.push(`/?url=${queryURL}&img=${Math.min(curImgNum + 1, apiData?.images.length || 1)}`, { scroll: false });
+    }
+
+    // --------- LOADING UI -----------
+    
     // TODO: Set this style in handleSubmit inside fetcher.
     const divStyle: React.CSSProperties = {
         backgroundImage: `url("${IMAGE_URL}${apiData?.images[curImgNum - 1]}")`,

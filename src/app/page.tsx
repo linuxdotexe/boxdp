@@ -35,7 +35,7 @@ export default function Home() {
 
       <SearchBox isFetching={isFetching} />
 
-      <ImageViewer setIsFetching={setIsFetching} />
+      <ImageViewer isFetching={isFetching} setIsFetching={setIsFetching} />
     </div>
   );
 };
