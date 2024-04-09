@@ -2,20 +2,24 @@ import ApiData from "@/utils/ApiData";
 import FormData from "@/utils/FormData";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from "react";
 
 interface SearchBoxProps {
-	fetcher: (url: string) => void,
+	// fetcher: (url: string) => void,
 	apiData?: ApiData | null,
 	setApiData?: Dispatch<SetStateAction<ApiData | null>>,
-	setIsVisible: Dispatch<SetStateAction<boolean>>,
+	setIsVisible?: Dispatch<SetStateAction<boolean>>,
 	isFetching: boolean,
 	BASE_URL?:	string,
 	IMAGE_URL?: string,
+	myRef?: React.MutableRefObject<HTMLElement | null>,
+	setQueryURL?: Dispatch<SetStateAction<string>>,
 }
 
 
-export default function SearchBox({ isFetching, setIsVisible, fetcher, BASE_URL }: SearchBoxProps) {
+export default function SearchBox({ isFetching }: SearchBoxProps) {
+	const router = useRouter();
 
 	const [formData, setFormData] = useState<FormData>({
 		blink: "",
@@ -23,8 +27,18 @@ export default function SearchBox({ isFetching, setIsVisible, fetcher, BASE_URL 
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setIsVisible(true);
-		fetcher(BASE_URL + formData.blink);
+		const url = formData.blink.trim();
+		const hasSpaces = /\s/g.test(url);
+		if(hasSpaces){
+			console.log("has spaces");
+			// reject
+			return;
+
+		}
+		router.push(`/?url=${url}&img=1#review`);
+		// console.log(BASE_URL + url);
+		// setQueryURL(BASE_URL + url);
+		// fetcher(BASE_URL + formData.blink);
 	};
 
 	// Event handler to update form data on input change
