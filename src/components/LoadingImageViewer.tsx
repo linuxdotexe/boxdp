@@ -3,7 +3,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export default function LoadingImageViewer() {
     return (
-        <div className="flex flex-col justify-evenly">
             <SkeletonTheme
                 width={1440}
                 height={1080}
@@ -53,7 +52,5 @@ export default function LoadingImageViewer() {
                     </button>
                 </div>
             </SkeletonTheme>
-
-        </div>
     );
 }

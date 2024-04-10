@@ -35,7 +35,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
 			return;
 
 		}
-		router.push(`/?url=${url}&img=1#review`);
+		router.push(`/?url=${url}&img=1#review`, {scroll: true});
 		// console.log(BASE_URL + url);
 		// setQueryURL(BASE_URL + url);
 		// fetcher(BASE_URL + formData.blink);
@@ -89,6 +89,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
 							</button>
 							<Link
 								href="#review"
+								scroll={true}
 								className="bg-neutral-950 p-2 border-solid border-2 border-sky-400 text-2xl rounded animate-wiggle">
 								View Review!
 							</Link>

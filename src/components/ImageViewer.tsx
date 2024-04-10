@@ -119,7 +119,7 @@ export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerPr
         backgroundPosition: "center",
     };
     return (
-        <div className="flex flex-col justify-evenly" id="review">
+        <>
             <article
                 ref={myRef}
                 className="m-auto flex 2xl:h-[1080px] 2xl:w-[1440px] h-[720px] w-[960px] flex-col justify-end bg-slate-800 select-none"
@@ -200,7 +200,7 @@ export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerPr
                     Download
                 </button>
             </div>
-        </div>
+        </>
     );
 };
 /*
