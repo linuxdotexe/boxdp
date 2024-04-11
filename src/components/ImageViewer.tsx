@@ -22,11 +22,9 @@ interface ImageViewerProps {
 }
 
 const BASE_URL =
-    "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/review?blink=";
+    "/api/review?url=";
 const IMAGE_URL =
     "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
-
-
 
 // -------- FUNCTION ---------
 export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerProps) {
