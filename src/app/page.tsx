@@ -34,8 +34,9 @@ export default function Home() {
     <div className="flex-1 flex flex-col align-center items-center justify-center bg-gradient-to-r from-orange-950 via-green-950 to-blue-950">
 
       <SearchBox isFetching={isFetching} />
-
-      <ImageViewer isFetching={isFetching} setIsFetching={setIsFetching} />
+      <div className="flex flex-col justify-evenly" id="review">
+        <ImageViewer isFetching={isFetching} setIsFetching={setIsFetching} />
+      </div>
     </div>
   );
 };

@@ -10,6 +10,7 @@ import { RefObject, ReactInstance, useState, Dispatch, SetStateAction, useEffect
 import ApiDataError from "@/utils/ApiDataError";
 import LoadingImageViewer from "./LoadingImageViewer";
 import ErrorImageViewer from "./ErrorImageViewer";
+import DefaultReviewStyle from "./DefaultReviewStyle";
 
 interface ImageViewerProps {
     queryURL?: string | null;
@@ -21,11 +22,9 @@ interface ImageViewerProps {
 }
 
 const BASE_URL =
-    "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/review?blink=";
+    "/api/review?url=";
 const IMAGE_URL =
     "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
-
-
 
 // -------- FUNCTION ---------
 export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerProps) {
@@ -38,7 +37,6 @@ export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerPr
 
     function fetcher(url: string) {
         return new Promise<ApiData | ApiDataError>((resolve, reject) => {
-
             setIsFetching(true);
             fetch(url, { method: "GET" })
                 .then((response) => {
@@ -48,16 +46,13 @@ export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerPr
                     if ("error" in res) {
                         throw res;
                     }
-
+                    setIsFetching(false);
                     resolve(res as ApiData);
-                    // setIsVisible(true);
                 })
                 .catch((error: ApiDataError) => {
-                    reject(error as ApiDataError);
                     console.error(error);
-                })
-                .finally(() => {
                     setIsFetching(false);
+                    reject(error as ApiDataError);
                 });
         });
 
@@ -113,52 +108,22 @@ export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerPr
     // --------- LOADING UI -----------
     
     // TODO: Set this style in handleSubmit inside fetcher.
-    const divStyle: React.CSSProperties = {
-        backgroundImage: `url("${IMAGE_URL}${apiData?.images[curImgNum - 1]}")`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-    };
     return (
-        <div className="flex flex-col justify-evenly" id="review">
-            <article
-                ref={myRef}
-                className="m-auto flex 2xl:h-[1080px] 2xl:w-[1440px] h-[720px] w-[960px] flex-col justify-end bg-slate-800 select-none"
-                style={divStyle}>
-                <div className="bg-black bg-opacity-50 w-full p-12 h-1/2">
-                    <p className="text-5xl font-bold pb-3">
-                        {apiData?.filmName}
-                        <sup className="pl-3 text-3xl">{apiData?.filmYear}</sup>
-                    </p>
-                    <p className="font-semibold text-3xl pb-3">
-                        Review by {apiData?.reviewerName} (@{apiData?.url.split("/")[3]}
-                        )
-                    </p>
-                    {/* <p>{apiData?.reviewDesc}</p> */}
-                    {apiData?.reviewRating !== 0 && (
-                        <Rating
-                            initialValue={apiData?.reviewRating}
-                            size={35}
-                            readonly={true}
-                            allowFraction={true}
-                            allowHover={false}
-                            emptyColor="#00000000"
-                            className=""
-                        />
-                    )}
-                    <p className="font-semibold text-3xl w-[810px] pt-3">
-                        {apiData?.reviewContent}
-                    </p>
-                </div>
-            </article>
+        <>
+            <DefaultReviewStyle 
+                apiData={apiData}
+                myRef={myRef}
+                curImgNum={curImgNum}
+            />
             <div className="flex flex-row justify-around">
 
                 <div className="flex flex-col m-10 h-50 max-w-max">
-                    <label
+                    <p
                         className="bg-orange-600 rounded-t text-center m-0 p-2"
                         title={String(apiData?.images.length)}
                     >
                         Pick an Image
-                    </label>
+                    </p>
                     <div className="flex bg-orange-500 p-0 text-black font-bold text-2xl rounded-b m-0 justify-between text-center h-50 shadow-2xl">
                         <button
                             className="bg-orange-300 p-2 rounded-bl w-10"
@@ -200,10 +165,41 @@ export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerPr
                     Download
                 </button>
             </div>
-        </div>
+        </>
     );
 };
 /*
 width: number;
 height: number;
+*/
+/*
+<article
+ref={myRef}
+className="m-auto flex 2xl:h-[1080px] 2xl:w-[1440px] h-[720px] w-[960px] flex-col justify-end bg-slate-800 select-none"
+style={divStyle}>
+<div className="bg-black bg-opacity-50 w-full p-12 h-1/2">
+    <p className="text-5xl font-bold pb-3">
+        {apiData?.filmName}
+        <sup className="pl-3 text-3xl">{apiData?.filmYear}</sup>
+    </p>
+    <p className="font-semibold text-3xl pb-3">
+        Review by {apiData?.reviewerName} (@{apiData?.url.split("/")[3]}
+        )
+    </p>
+    {apiData?.reviewRating !== 0 && (
+        <Rating
+            initialValue={apiData?.reviewRating}
+            size={35}
+            readonly={true}
+            allowFraction={true}
+            allowHover={false}
+            emptyColor="#00000000"
+            className=""
+        />
+    )}
+    <p className="font-semibold text-3xl w-[810px] pt-3">
+        {apiData?.reviewContent}
+    </p>
+</div>
+</article>
 */

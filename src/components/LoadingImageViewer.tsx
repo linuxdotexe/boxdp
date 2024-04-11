@@ -3,7 +3,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export default function LoadingImageViewer() {
     return (
-        <div className="flex flex-col justify-evenly">
             <SkeletonTheme
                 width={1440}
                 height={1080}
@@ -19,11 +18,11 @@ export default function LoadingImageViewer() {
                 <div className="flex flex-row justify-around">
 
                     <div className="flex flex-col m-10 h-50 max-w-max">
-                        <label
+                        <p
                             className="bg-gray-600 rounded-t text-center m-0 p-2"
                         >
-                            Pick an Image
-                        </label>
+                            -
+                        </p>
                         <div className="flex bg-gray-500 p-0 text-white font-bold text-2xl rounded-b m-0 justify-between text-center h-50 shadow-2xl">
                             <button
                                 className="bg-gray-300 p-2 rounded-bl w-10"
@@ -46,14 +45,12 @@ export default function LoadingImageViewer() {
                     </div>
 
                     <button
-                        className="bg-gray-500 p-2 text-white font-bold text-2xl rounded max-w-max m-10 justify-center text-center h-50 shadow-2xl"
+                        className="bg-gray-500 p-2 text-white font-bold text-2xl rounded w-40 m-10 justify-center text-center h-50 shadow-2xl"
                         disabled={true}
                     >
-                        Download
+                        -
                     </button>
                 </div>
             </SkeletonTheme>
-
-        </div>
     );
 }
