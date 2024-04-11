@@ -1,13 +1,21 @@
 import ApiData from "@/utils/ApiData";
 import { Rating } from "react-simple-star-rating";
 
-interface DefaultReviewStyleProps {
+interface ReviewStyleProps {
     myRef: React.MutableRefObject<HTMLElement | null>;
-    divStyle: React.CSSProperties;
+    curImgNum: number;
     apiData: ApiData
 }
 
-export default function DefaultReviewStyle({myRef, divStyle, apiData}: DefaultReviewStyleProps) {
+const IMAGE_URL =
+    "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
+
+export default function DefaultReviewStyle({ myRef, curImgNum, apiData }: ReviewStyleProps) {
+    const divStyle: React.CSSProperties = {
+        backgroundImage: `url("${IMAGE_URL}${apiData?.images[curImgNum - 1]}")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+    };
     return (
         <article
             ref={myRef}

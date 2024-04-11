@@ -110,17 +110,12 @@ export default function ImageViewer({ isFetching, setIsFetching }: ImageViewerPr
     // --------- LOADING UI -----------
     
     // TODO: Set this style in handleSubmit inside fetcher.
-    const divStyle: React.CSSProperties = {
-        backgroundImage: `url("${IMAGE_URL}${apiData?.images[curImgNum - 1]}")`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-    };
     return (
         <>
             <DefaultReviewStyle 
                 apiData={apiData}
                 myRef={myRef}
-                divStyle={divStyle}
+                curImgNum={curImgNum}
             />
             <div className="flex flex-row justify-around">
 
