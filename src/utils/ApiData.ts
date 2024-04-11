@@ -1,4 +1,5 @@
 export default interface ApiData {
+    reviewerId: string,
     reviewerName: string,
     reviewDesc: string,
     reviewContent: string,
@@ -7,5 +8,6 @@ export default interface ApiData {
     reviewRating: number,
     filmURL: string,
     url: string,
-    images: Array<string>
+    images: Array<string>,
+    datePublished: string,
 };
