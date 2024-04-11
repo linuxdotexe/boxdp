@@ -118,6 +118,8 @@ function makeJson(data: string) {
     }
 }
 
+const letterboxdReviewRegex = /^https:\/\/letterboxd\.com\/([a-zA-Z0-9_-]+)\/film\/([a-zA-Z0-9_-]+)\/?(\d*)\/?$/;
+
 export default async function getReviewData(req_url: string) {
     const axios_options = {
         method: "get",
@@ -126,11 +128,23 @@ export default async function getReviewData(req_url: string) {
     };
     
     const res = await axios(axios_options);
-
+    if(!res) {
+        throw new UrlValidationError(
+            `could not get a response`,
+            500,
+        );
+    }
     if (res.request.host !== 'letterboxd.com') {
         throw new UrlValidationError(
             `url does not resolve to 'letterboxd.com'. Resolves to: ${res.request.host}`,
             400,
+        );
+    }
+    if (!letterboxdReviewRegex.test(res.request.res.responseUrl)) {
+        throw new UrlValidationError(
+            `url is not a review url.`,
+            400,
+            res.request.res.responseUrl
         );
     }
     const data = getScrapedData(res);
