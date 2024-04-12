@@ -30,6 +30,8 @@ function getScrapedData(res: AxiosResponse<any, any>) {
 
 async function getImages(url: string) {
     const API_KEY = process.env.TMDB_API_KEY;
+    if(!API_KEY)
+        throw new Error('missing: tmdb api key');
     const images: Array<string> = [];
     const res = await axios({
         method: 'GET',
@@ -41,16 +43,30 @@ async function getImages(url: string) {
 
     const $ = cheerio.load(res.data);
     const body = $('body');
-    const content_type = body.attr('data-tmdb-type');
-    const content_id = body.attr('data-tmdb-id');
+    let content_type = body.attr('data-tmdb-type');
+    let content_id = body.attr('data-tmdb-id');
+
+    // if body tag doesn't have tmdb attributes
     if (!content_id || !content_type) {
-        let lbx_image = $('#backdrop').attr('data-backdrop2x');
-        if (!lbx_image)
-            lbx_image = $('#backdrop').attr('data-backdrop');
-        if (lbx_image)
-            images.push(lbx_image);
-        return images;
+        const tmdb_url = $('a[data-track-action="TMDb"]').attr('href');
+        if (tmdb_url) {
+            const tmdb_url_obj = new URL(tmdb_url);
+            if(tmdb_url_obj.hostname === 'www.themoviedb.org' && tmdb_url_obj.pathname !== '') {
+                const tmdb_pathname_split = tmdb_url_obj.pathname.split('/');
+                content_id = tmdb_pathname_split[2];
+                content_type = tmdb_pathname_split[1];
+            }
+        } 
+        if (!content_id || !content_type) {
+            let lbx_image = $('#backdrop').attr('data-backdrop2x');
+            if (!lbx_image)
+                lbx_image = $('#backdrop').attr('data-backdrop');
+            if (lbx_image)
+                images.push(lbx_image);
+            return images;
+        }
     }
+
     const tmdbData = await axios({
         method: 'GET',
         headers: {
@@ -102,6 +118,8 @@ function makeJson(data: string) {
     }
 }
 
+const letterboxdReviewRegex = /^https:\/\/letterboxd\.com\/([a-zA-Z0-9_-]+)\/film\/([a-zA-Z0-9_-]+)\/?(\d*)\/?$/;
+
 export default async function getReviewData(req_url: string) {
     const axios_options = {
         method: "get",
@@ -110,11 +128,23 @@ export default async function getReviewData(req_url: string) {
     };
     
     const res = await axios(axios_options);
-
+    if(!res) {
+        throw new UrlValidationError(
+            `could not get a response`,
+            500,
+        );
+    }
     if (res.request.host !== 'letterboxd.com') {
         throw new UrlValidationError(
             `url does not resolve to 'letterboxd.com'. Resolves to: ${res.request.host}`,
             400,
+        );
+    }
+    if (!letterboxdReviewRegex.test(res.request.res.responseUrl)) {
+        throw new UrlValidationError(
+            `url is not a review url.`,
+            400,
+            res.request.res.responseUrl
         );
     }
     const data = getScrapedData(res);
@@ -137,6 +167,7 @@ export default async function getReviewData(req_url: string) {
         filmURL: data.itemReviewed.sameAs,
         url: data.url,
         datePublished: data.datePublished,
+        directors: data.itemReviewed.director.map((item) => item.name),
         images,
     };
     return apiData;

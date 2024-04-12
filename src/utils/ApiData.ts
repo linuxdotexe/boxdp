@@ -8,6 +8,7 @@ export default interface ApiData {
     reviewRating: number,
     filmURL: string,
     url: string,
+    directors: Array<string>,
     images: Array<string>,
     datePublished: string,
 };
