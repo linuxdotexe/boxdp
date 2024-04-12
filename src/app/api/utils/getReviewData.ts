@@ -167,6 +167,7 @@ export default async function getReviewData(req_url: string) {
         filmURL: data.itemReviewed.sameAs,
         url: data.url,
         datePublished: data.datePublished,
+        directors: data.itemReviewed.director.map((item) => item.name),
         images,
     };
     return apiData;
