@@ -23,9 +23,9 @@ export default function RootLayout({
       lang="en"
       className="scroll-smooth">
       <body className={inter.className}>
-        <Header />
-        <div className="">
-          {children}
+        <div className="flex flex-col h-screen justify-between">
+          <Header />
+          <div className="mb-auto">{children}</div>
           <Footer />
         </div>
       </body>

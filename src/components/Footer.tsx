@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer>
-      <p className="bg-neutral-900 p-5 text-center absolute bottom-0 w-full">
+      <p className="bg-neutral-900 p-5 text-center w-full">
         Made with {"<3"} by{" "}
         <a
           href="https://letterboxd.com/kenough_"
