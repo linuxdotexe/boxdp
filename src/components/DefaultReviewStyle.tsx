@@ -7,8 +7,9 @@ interface ReviewStyleProps {
   apiData: ApiData;
 }
 
-const IMAGE_URL =
-  "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
+// ? back in the old days, we needed this.
+// const IMAGE_URL =
+//   "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
 
 export default function DefaultReviewStyle({
   myRef,
@@ -56,8 +57,6 @@ export default function DefaultReviewStyle({
         content = content.split(" ").splice(0, 70).join(" ") + " [...]";
       }
     }
-    const containsNewline = content.includes("\n");
-    console.log(containsNewline);
 
     // Functions
     const wrapText = (
@@ -296,8 +295,9 @@ export default function DefaultReviewStyle({
       fillContent(ctx, content, false);
       fillFooter(ctx);
     };
-    img.src = `${IMAGE_URL}${apiData?.images[curImgNum - 1]}`;
-  }, []);
+    // img.src = `${IMAGE_URL}${apiData?.images[curImgNum - 1]}`;
+    img.src = `${apiData?.images[curImgNum - 1]}`;
+  }, [apiData, curImgNum]);
 
   return (
     <div className="aspect-square w-[300px] m-auto rounded-xl overflow-hidden">

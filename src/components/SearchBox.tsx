@@ -1,7 +1,6 @@
 import ApiData from "@/utils/ApiData";
 import FormData from "@/utils/FormData";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ChangeEvent,
@@ -55,7 +54,9 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
   };
 
   return (
-    <form className="flex w-full font-medium" onSubmit={handleSubmit}>
+    <form
+      className="flex w-full font-medium"
+      onSubmit={handleSubmit}>
       <input
         className="w-full rounded-full rounded-r-none my-5 py-3 pl-5 
         bg-neutral-900 active:bg-neutral-900 placeholder:text-neutral-400 
@@ -70,7 +71,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
       />
       <button
         className="bg-blue-400 text-neutral-900 font-bold px-5 h-[49.5px]
-        py-3 rounded-full text-base top-[19px] right-3 relative"
+        py-3 rounded-full text-base top-[19px] right-3 relative disabled:bg-neutral-600 disabled:text-neutral-100"
         type="submit"
         disabled={isFetching}>
         Submit!
