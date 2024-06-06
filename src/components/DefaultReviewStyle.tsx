@@ -49,12 +49,11 @@ export default function DefaultReviewStyle({
     let content = `${apiData?.reviewContent}`;
     if (content === undefined || content === "undefined") {
       content = "";
-    }
-    if (content.includes("\n")) {
-      content = content.split(" ").splice(0, 65).join(" ") + " [...]";
-    } else {
-      if (content.split(" ").length > 80) {
-        content = content.split(" ").splice(0, 80).join(" ") + " [...]";
+    } else if (content.split(" ").length > 50) {
+      if (content.includes("\n")) {
+        content = content.split(" ").splice(0, 50).join(" ") + " [...]";
+      } else {
+        content = content.split(" ").splice(0, 70).join(" ") + " [...]";
       }
     }
     const containsNewline = content.includes("\n");
@@ -265,7 +264,7 @@ export default function DefaultReviewStyle({
       }
       isPartial = count % 1 !== 0;
       starsPosition = byPosition + starsHeight / 2;
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < count && count >= 1; i++) {
         const img = new Image();
         img.crossOrigin = "anonymous";
         img.onload = function () {
