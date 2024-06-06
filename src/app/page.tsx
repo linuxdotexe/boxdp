@@ -27,11 +27,18 @@ export default function Home() {
   const [isFetching, setIsFetching] = useState(false);
 
   return (
-    <div className="flex-1 flex flex-col align-center items-center justify-center bg-gradient-to-r from-orange-950 via-green-950 to-blue-950">
+    <div className="max-w-96 box-border m-auto px-7 py-5">
+      <p className="text-neutral-100 text-base font-medium">
+        Paste your review’s link and click submit to get a pretty little image
+        of your review.
+      </p>
       <SearchBox isFetching={isFetching} />
-      <div className="flex flex-col justify-evenly" id="review">
+      <div id="review">
         <Suspense>
-          <ImageViewer isFetching={isFetching} setIsFetching={setIsFetching} />
+          <ImageViewer
+            isFetching={isFetching}
+            setIsFetching={setIsFetching}
+          />
         </Suspense>
       </div>
     </div>

@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Karla } from "next/font/google";
 import "./globals.css";
 
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
-const inter = Outfit({ subsets: ["latin"] });
+const inter = Karla({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "boxd-pics",
-  description: "Get a prettier image of your letterboxd review. Just provide the URL.",
+  description:
+    "Get a prettier image of your letterboxd review. Just provide the URL.",
 };
 
 export default function RootLayout({
@@ -17,9 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html
+      lang="en"
+      className="scroll-smooth">
       <body className={inter.className}>
-        <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="">
           {children}
           <Footer />
         </div>
