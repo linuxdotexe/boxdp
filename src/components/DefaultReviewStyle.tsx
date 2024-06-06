@@ -47,6 +47,9 @@ export default function DefaultReviewStyle({
     const gapBetweenFooterAndContent = 60;
     let containerHeightStart: number;
     let content = `${apiData?.reviewContent}`;
+    if (content === undefined || content === "undefined") {
+      content = "";
+    }
     if (content.includes("\n")) {
       content = content.split(" ").splice(0, 65).join(" ") + " [...]";
     } else {
