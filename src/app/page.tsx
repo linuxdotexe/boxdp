@@ -33,6 +33,7 @@ export default function Home() {
         of your review.
       </p>
       <SearchBox isFetching={isFetching} />
+      <h3 className="text-2xl font-bold text-center mb-5">Preview</h3>
       <div id="review">
         <Suspense>
           <ImageViewer

@@ -26,8 +26,6 @@ interface ImageViewerProps {
 }
 
 const BASE_URL = "/api/review?url=";
-const IMAGE_URL =
-  "https://letterboxd-review-api-abhishekyelleys-projects.vercel.app/image?blink=";
 
 // -------- FUNCTION ---------
 export default function ImageViewer({
@@ -89,7 +87,13 @@ export default function ImageViewer({
     return <LoadingImageViewer />;
   }
   if (apiData === null) {
-    return <></>;
+    return (
+      <>
+        <img
+          src="/preview.png"
+          className="rounded-xl"></img>
+      </>
+    );
   }
   if ("error" in apiData) {
     return <ErrorImageViewer />;
@@ -124,8 +128,7 @@ export default function ImageViewer({
 
   // TODO: Set this style in handleSubmit inside fetcher
   return (
-    <div className="flex flex-col">
-      <h3 className="text-2xl font-bold text-center mb-5">Result Preview</h3>
+    <div className="flex flex-col items-center">
       <DefaultReviewStyle
         apiData={apiData}
         myRef={myRef}
@@ -142,6 +145,30 @@ export default function ImageViewer({
         }}>
         Download!
       </button>
+      <div className="mt-5">
+        <p
+          className="text-xl text-center"
+          title={String(apiData?.images.length)}>
+          Image Selector
+        </p>
+        <div className="flex flex-row gap-6 justify-center mt-2">
+          <button
+            className="px-3 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl"
+            title="prev"
+            onClick={handleImgNumDecr}>
+            {"<"}
+          </button>
+          <p className="text-center self-center border-2 px-3 py-1 border-blue-400 rounded-xl text-xl font-bold">
+            {curImgNum}
+          </p>
+          <button
+            className="px-3 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl"
+            title="next"
+            onClick={handleImgNumIncr}>
+            {">"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
