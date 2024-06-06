@@ -153,17 +153,19 @@ export default function ImageViewer({
         </p>
         <div className="flex flex-row gap-6 justify-center mt-2">
           <button
-            className="px-3 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl"
+            className="px-6 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-2xl disabled:bg-neutral-600 disabled:text-neutral-100"
             title="prev"
+            disabled={curImgNum === 1}
             onClick={handleImgNumDecr}>
             {"<"}
           </button>
-          <p className="text-center self-center border-2 px-3 py-1 border-blue-400 rounded-xl text-xl font-bold">
-            {curImgNum}
+          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 rounded-xl text-xl font-bold">
+            {curImgNum} / {apiData.images.length}
           </p>
           <button
-            className="px-3 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl"
+            className="px-6 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-2xl disabled:bg-neutral-600 disabled:text-neutral-100"
             title="next"
+            disabled={curImgNum === apiData.images.length}
             onClick={handleImgNumIncr}>
             {">"}
           </button>
