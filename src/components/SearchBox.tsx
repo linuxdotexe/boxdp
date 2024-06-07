@@ -29,6 +29,8 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
     blink: "",
   });
 
+  const [submitted, setSubmitted] = useState(false);
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const url = formData.blink.trim();
@@ -39,9 +41,16 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
       return;
     }
     router.push(`/?url=${url}&img=1#review`, { scroll: true });
+    setSubmitted(true);
+
     // console.log(BASE_URL + url);
     // setQueryURL(BASE_URL + url);
     // fetcher(BASE_URL + formData.blink);
+  };
+
+  const handleClear = () => {
+    setFormData({ blink: "" });
+    setSubmitted(false);
   };
 
   // Event handler to update form data on input change
@@ -51,6 +60,9 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
       ...prevData,
       [name]: value,
     }));
+    if (value.trim() === "") {
+      setSubmitted(false);
+    }
   };
 
   return (
@@ -69,13 +81,30 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
         // autoFocus
         placeholder="Paste your link here."
       />
-      <button
+      {/* <button
         className="bg-blue-400 text-neutral-900 font-bold px-5 h-[49.5px]
         py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative disabled:bg-neutral-600 disabled:text-neutral-100"
         type="submit"
         disabled={isFetching}>
         Submit!
-      </button>
+      </button> */}
+      {submitted ? (
+        <button
+          className="bg-red-400 text-neutral-900 font-bold px-5 h-[49.5px]
+          py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative"
+          type="button"
+          onClick={handleClear}>
+          Clear
+        </button>
+      ) : (
+        <button
+          className="bg-blue-400 text-neutral-900 font-bold px-5 h-[49.5px]
+          py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative disabled:bg-neutral-600 disabled:text-neutral-100"
+          type="submit"
+          disabled={isFetching}>
+          Submit!
+        </button>
+      )}
     </form>
   );
 }

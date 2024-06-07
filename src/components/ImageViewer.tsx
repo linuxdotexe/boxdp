@@ -144,7 +144,7 @@ export default function ImageViewer({
         <p
           className="text-lg text-center md:text-2xl font-medium"
           title={String(apiData?.images.length)}>
-          Image Selector
+          Pick an Image
         </p>
         <div className="flex flex-row gap-6 justify-center items-center mt-2">
           <button
