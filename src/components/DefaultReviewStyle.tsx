@@ -20,10 +20,6 @@ export default function DefaultReviewStyle({
   const canvasRef = myRef;
 
   useEffect(() => {
-    let myFont = new FontFace(
-      "Karla",
-      "url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap')"
-    );
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -289,9 +285,6 @@ export default function DefaultReviewStyle({
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
-      myFont.load().then((font) => {
-        document.fonts.add(font);
-      });
       fillBg(ctx, img);
       fillContent(ctx, content, true);
       fillTitle(ctx, title, true);
@@ -304,7 +297,7 @@ export default function DefaultReviewStyle({
     };
     // img.src = `${IMAGE_URL}${apiData?.images[curImgNum - 1]}`;
     img.src = `${apiData?.images[curImgNum - 1]}`;
-  }, [apiData, curImgNum]);
+  }, [curImgNum]);
 
   return (
     <div className="w-full aspect-square m-auto rounded-xl overflow-hidden">

@@ -16,6 +16,11 @@
   }
 }
 
+@font-face {
+  font-family: "Karla";
+  src: url("https://fonts.gstatic.com/s/pangolin/v6/cY9GfjGcW0FPpi-tWMfN79z4i6BH.woff2");
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
