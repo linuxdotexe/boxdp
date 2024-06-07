@@ -140,6 +140,36 @@ export default function ImageViewer({
         myRef={myRef}
         curImgNum={curImgNum}
       />
+      <div className="mt-5">
+        <p
+          className="text-lg text-center md:text-2xl font-medium"
+          title={String(apiData?.images.length)}>
+          Image Selector
+        </p>
+        <div className="flex flex-row gap-6 justify-center items-center mt-2">
+          <button
+            className="px-4 rounded-full bg-blue-400 aspect-square disabled:bg-neutral-600 "
+            title="prev"
+            disabled={curImgNum === 1}
+            onClick={handleImgNumDecr}>
+            <img
+              src="/chevron-right-solid.svg"
+              className="w-4 rotate-180"></img>
+          </button>
+          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 rounded-xl text-xl font-bold md:text-2xl">
+            {curImgNum} / {apiData.images.length}
+          </p>
+          <button
+            className="px-4 rounded-full bg-blue-400 aspect-square disabled:bg-neutral-600 "
+            title="next"
+            disabled={curImgNum === apiData.images.length}
+            onClick={handleImgNumIncr}>
+            <img
+              src="/chevron-right-solid.svg"
+              className="w-4"></img>
+          </button>
+        </div>
+      </div>
       <button
         className="bg-blue-400 px-4 text-neutral-900 font-bold text-base rounded-full mt-5 w-fit py-3 self-center md:text-xl"
         onClick={async () => {
@@ -151,32 +181,6 @@ export default function ImageViewer({
         }}>
         Download!
       </button>
-      <div className="mt-5">
-        <p
-          className="text-xl text-center md:text-3xl"
-          title={String(apiData?.images.length)}>
-          Image Selector
-        </p>
-        <div className="flex flex-row gap-6 justify-center items-center mt-2">
-          <button
-            className="px-4 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl md:text-2xl disabled:bg-neutral-600 disabled:text-neutral-100"
-            title="prev"
-            disabled={curImgNum === 1}
-            onClick={handleImgNumDecr}>
-            {"<"}
-          </button>
-          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 rounded-xl text-xl font-bold md:text-2xl">
-            {curImgNum} / {apiData.images.length}
-          </p>
-          <button
-            className="px-4 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl disabled:bg-neutral-600 disabled:text-neutral-100 md:text-2xl"
-            title="next"
-            disabled={curImgNum === apiData.images.length}
-            onClick={handleImgNumIncr}>
-            {">"}
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
