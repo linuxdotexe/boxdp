@@ -5,7 +5,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
-const inter = Karla({ subsets: ["latin"] });
+// const inter = Karla({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "boxd-pics",
@@ -27,7 +27,8 @@ export default function RootLayout({
     <html
       lang="en"
       className="scroll-smooth">
-      <body className={inter.className}>
+      {/* <body className={inter.className}> */}
+      <body>
         <div
           className="flex flex-col h-screen justify-between"
           style={fh}>
