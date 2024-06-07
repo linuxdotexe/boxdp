@@ -1,13 +1,22 @@
 export default function Footer() {
-    return (
-        <footer>
-            <div className="w-full bg-gradient-to-r from-orange-600 via-green-600 to-sky-600">
-                <div className="flex flex-row justify-around items-center z-10">
-                    <a href="https://www.themoviedb.org/"><p className="px-10 bg-gradient-to-r from-transparent via-orange-900 to-transparent">TMDB</p></a>
-                    <a href="https://boxdp.vercel.app/"><p className="px-10 bg-gradient-to-r from-transparent via-green-900 to-transparent">boxd-pics</p></a>
-                    <a href="https://letterboxd.com/"><p className="px-10 bg-gradient-to-r from-transparent via-sky-900 to-transparent">Letterboxd</p></a>
-                </div>
-            </div>
-        </footer>
-    );
-};
+  return (
+    <footer className="w-full sm:w-3/4 md:w-4/5 lg:w-4/6 xl:w-1/3 border-t-2 border-neutral-800 p-2.5 m-auto mb-0">
+      <p className="p-3 text-center w-full text-base md:text-lg">
+        Made with {"<3"} by{" "}
+        <a
+          href="https://letterboxd.com/kenough_"
+          className="text-blue-400">
+          @kenough_
+        </a>{" "}
+        and{" "}
+        <a
+          href="https://github.com/abhishekyelley"
+          target="blank"
+          rel="_noreferrer"
+          className="text-blue-400">
+          abhishekyelley
+        </a>
+      </p>
+    </footer>
+  );
+}
