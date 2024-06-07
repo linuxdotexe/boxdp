@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     "Get a prettier image of your letterboxd review. Just provide the URL.",
 };
 
+const fh: React.CSSProperties = {
+  height: "100vh", // Set the height value here
+  // You can add more CSS properties as needed
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -23,7 +28,9 @@ export default function RootLayout({
       lang="en"
       className="scroll-smooth">
       <body className={inter.className}>
-        <div className="flex flex-col h-screen justify-between">
+        <div
+          className="flex flex-col h-screen justify-between"
+          style={fh}>
           <Header />
           <div className="mb-auto">{children}</div>
           <Footer />

@@ -3,18 +3,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 export default function LoadingImageViewer() {
   return (
-    <SkeletonTheme
-      width={300}
-      height={300}
-      borderRadius={5}
-      enableAnimation={true}
-      baseColor="#45556e"
-      highlightColor="#9ed9b0">
-      <Skeleton
-        height={300}
-        count={1}
-        style={{ margin: 5 }}
-      />
-    </SkeletonTheme>
+    <div className="flex flex-col justify-center w-auto">
+      <h3 className="text-2xl md:text-4xl font-bold text-center mb-5">
+        Please wait...
+      </h3>
+      <img
+        src="/loading.gif"
+        className="w-full rounded-xl"></img>
+    </div>
   );
 }

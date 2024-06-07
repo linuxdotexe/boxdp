@@ -300,7 +300,7 @@ export default function DefaultReviewStyle({
   }, [apiData, curImgNum]);
 
   return (
-    <div className="aspect-square w-[300px] m-auto rounded-xl overflow-hidden">
+    <div className="w-full aspect-square m-auto rounded-xl overflow-hidden">
       <canvas
         id="canvas"
         ref={canvasRef}

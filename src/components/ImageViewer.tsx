@@ -88,11 +88,14 @@ export default function ImageViewer({
   }
   if (apiData === null) {
     return (
-      <>
+      <div className="flex flex-col justify-center w-auto">
+        <h3 className="text-2xl md:text-4xl font-bold text-center mb-5">
+          Hello!
+        </h3>
         <img
           src="/preview.png"
           className="rounded-xl"></img>
-      </>
+      </div>
     );
   }
   if ("error" in apiData) {
@@ -129,13 +132,16 @@ export default function ImageViewer({
   // TODO: Set this style in handleSubmit inside fetcher
   return (
     <div className="flex flex-col items-center">
+      <h3 className="text-2xl md:text-4xl font-bold text-center mb-5">
+        Result
+      </h3>
       <DefaultReviewStyle
         apiData={apiData}
         myRef={myRef}
         curImgNum={curImgNum}
       />
       <button
-        className="bg-blue-400 px-4 text-neutral-900 font-bold text-base rounded-full mt-5 w-fit py-3 self-center"
+        className="bg-blue-400 px-4 text-neutral-900 font-bold text-base rounded-full mt-5 w-fit py-3 self-center md:text-xl"
         onClick={async () => {
           if (!myRef.current) return;
           const link = document.createElement("a");
@@ -147,23 +153,23 @@ export default function ImageViewer({
       </button>
       <div className="mt-5">
         <p
-          className="text-xl text-center"
+          className="text-xl text-center md:text-3xl"
           title={String(apiData?.images.length)}>
           Image Selector
         </p>
-        <div className="flex flex-row gap-6 justify-center mt-2">
+        <div className="flex flex-row gap-6 justify-center items-center mt-2">
           <button
-            className="px-6 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-2xl disabled:bg-neutral-600 disabled:text-neutral-100"
+            className="px-4 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl md:text-2xl disabled:bg-neutral-600 disabled:text-neutral-100"
             title="prev"
             disabled={curImgNum === 1}
             onClick={handleImgNumDecr}>
             {"<"}
           </button>
-          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 rounded-xl text-xl font-bold">
+          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 rounded-xl text-xl font-bold md:text-2xl">
             {curImgNum} / {apiData.images.length}
           </p>
           <button
-            className="px-6 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-2xl disabled:bg-neutral-600 disabled:text-neutral-100"
+            className="px-4 rounded-full bg-blue-400 aspect-square text-neutral-900 font-black text-xl disabled:bg-neutral-600 disabled:text-neutral-100 md:text-2xl"
             title="next"
             disabled={curImgNum === apiData.images.length}
             onClick={handleImgNumIncr}>

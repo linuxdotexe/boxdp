@@ -55,12 +55,12 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
 
   return (
     <form
-      className="flex w-full font-medium"
+      className="flex w-full font-medium m-auto"
       onSubmit={handleSubmit}>
       <input
         className="w-full rounded-full rounded-r-none my-5 py-3 pl-5 
         bg-neutral-900 active:bg-neutral-900 placeholder:text-neutral-400 
-        text-neutral-100 text-base focus:outline-none h-fit"
+        text-neutral-100 text-base md:text-lg focus:outline-none h-fit"
         value={formData.blink}
         onChange={handleInputChange}
         type="text"
@@ -71,7 +71,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
       />
       <button
         className="bg-blue-400 text-neutral-900 font-bold px-5 h-[49.5px]
-        py-3 rounded-full text-base top-[19px] right-3 relative disabled:bg-neutral-600 disabled:text-neutral-100"
+        py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative disabled:bg-neutral-600 disabled:text-neutral-100"
         type="submit"
         disabled={isFetching}>
         Submit!
