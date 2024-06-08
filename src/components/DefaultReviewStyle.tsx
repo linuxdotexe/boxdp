@@ -52,9 +52,7 @@ export default function DefaultReviewStyle({
       const gapBetweenFooterAndContent = 60;
       let containerHeightStart: number;
       let content = `${apiData?.reviewContent}`;
-      if (content === undefined || content === "undefined") {
-        content = "";
-      } else if (content.split(" ").length > 50) {
+      if (content.split(" ").length > 50) {
         if (content.includes("\n")) {
           content = content.split(" ").splice(0, 50).join(" ") + " [...]";
         } else {
