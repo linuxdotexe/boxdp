@@ -1,6 +1,3 @@
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-
 export default function LoadingImageViewer() {
   return (
     <div className="flex flex-col justify-center w-auto">
