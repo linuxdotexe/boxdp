@@ -266,7 +266,9 @@ export default function DefaultReviewStyle({
         }
         isPartial = count % 1 !== 0;
         starsPosition = byPosition + starsHeight / 2;
-        for (let i = 0; i < count && count >= 1; i++) {
+        const fullStars = Math.floor(count);
+        const halfStars = Math.ceil(count - fullStars);
+        for (let i = 0; i < fullStars && fullStars >= 1; i++) {
           const img = new Image();
           img.crossOrigin = "anonymous";
           img.onload = function () {
@@ -275,7 +277,7 @@ export default function DefaultReviewStyle({
           };
           img.src = "/star.svg";
         }
-        if (isPartial) {
+        if (halfStars !== 0) {
           const img = new Image();
           img.onload = function () {
             ctx.drawImage(img, initX, starsPosition + 5.5);
