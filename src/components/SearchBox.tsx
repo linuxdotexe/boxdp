@@ -67,7 +67,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
 
   return (
     <form
-      className="flex w-full font-medium m-auto"
+      className="flex w-full font-medium m-auto items-center"
       onSubmit={handleSubmit}>
       <input
         className="w-full rounded-full rounded-r-none my-5 py-3 pl-5 
@@ -81,14 +81,27 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
         // autoFocus
         placeholder="Paste your link here."
       />
-      {/* <button
-        className="bg-blue-400 text-neutral-900 font-bold px-5 h-[49.5px]
-        py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative disabled:bg-neutral-600 disabled:text-neutral-100"
+      <button
+        className="bg-neutral-900 text-neutral-400 font-medium pr-10 pl-5 py-3 md:py-3.5 text-xl md:text-2xl"
+        type="button"
+        onClick={handleClear}
+        disabled={isFetching}>
+        <img
+          src="/xmark-solid.svg"
+          alt="clear"
+          className="h-6 w-6"
+        />
+      </button>
+      <button
+        className="bg-blue-400 text-neutral-900 font-bold px-5
+        py-3 rounded-full text-base md:text-lg  right-3 md:right-5
+        relative disabled:bg-neutral-600 disabled:text-neutral-100"
         type="submit"
         disabled={isFetching}>
         Submit!
-      </button> */}
-      {submitted ? (
+      </button>
+      // ! remove after verifying working of the new clear button
+      {/* {submitted ? (
         <button
           className="bg-red-400 text-neutral-900 font-bold px-5 h-[49.5px]
           py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative"
@@ -104,7 +117,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
           disabled={isFetching}>
           Submit!
         </button>
-      )}
+      )} */}
     </form>
   );
 }
