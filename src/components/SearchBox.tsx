@@ -100,7 +100,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
         disabled={isFetching}>
         Submit!
       </button>
-      {/* ! remove after verifying working of the new clear button */}
+      {/* // ! remove after verifying working of the new clear button */}
       {/* {submitted ? (
         <button
           className="bg-red-400 text-neutral-900 font-bold px-5 h-[49.5px]

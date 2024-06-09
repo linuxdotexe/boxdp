@@ -40,6 +40,8 @@ export default function ImageViewer({
   const queryURL = searchParams.get("url");
 
   const [sliderValue, setSliderValue] = useState<number>(0);
+  const [accordionToggle, setAccordionToggle] = useState<boolean>(false);
+  console.log(accordionToggle);
 
   function fetcher(url: string) {
     return new Promise<ApiData | ApiDataError>((resolve, reject) => {
@@ -145,13 +147,14 @@ export default function ImageViewer({
       />
       <div className="mt-5">
         <p
-          className="text-lg text-center md:text-2xl font-medium"
+          className="text-lg text-center md:text-2xl font-medium text-neutral-200"
           title={String(apiData?.images.length)}>
           Pick an Image
         </p>
         <div className="flex flex-row gap-6 justify-center items-center mt-2">
           <button
-            className="px-4 rounded-full bg-blue-400 aspect-square disabled:bg-neutral-600 "
+            className="px-8 py-2 rounded-full bg-blue-400
+            disabled:bg-neutral-600 "
             title="prev"
             disabled={curImgNum === 1}
             onClick={handleImgNumDecr}>
@@ -159,11 +162,11 @@ export default function ImageViewer({
               src="/chevron-right-solid.svg"
               className="w-4 rotate-180"></img>
           </button>
-          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 rounded-xl text-xl font-bold md:text-2xl">
+          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 text-neutral-300 rounded-xl text-xl font-bold md:text-2xl">
             {curImgNum} / {apiData.images.length}
           </p>
           <button
-            className="px-4 rounded-full bg-blue-400 aspect-square disabled:bg-neutral-600 "
+            className="px-8 py-2 rounded-full bg-blue-400 disabled:bg-neutral-600 "
             title="next"
             disabled={curImgNum === apiData.images.length}
             onClick={handleImgNumIncr}>
@@ -173,14 +176,6 @@ export default function ImageViewer({
           </button>
         </div>
       </div>
-      <input
-        type="range"
-        min={-1}
-        max={1}
-        value={sliderValue}
-        onChange={(e) => setSliderValue(parseFloat(e.target.value))}
-        step={0.01}
-      />
       <button
         className="bg-blue-400 px-4 text-neutral-900 font-bold text-base rounded-full mt-5 w-fit py-3 self-center md:text-xl"
         onClick={async () => {
@@ -191,6 +186,39 @@ export default function ImageViewer({
           link.click();
         }}>
         Download!
+      </button>
+      <button
+        className={`bg-neutral-900 w-full text-left py-4 px-6 mt-5
+        cursor-pointer ${accordionToggle ? "rounded-3xl" : "rounded-full"}`}
+        onClick={(e) => setAccordionToggle(!accordionToggle)}>
+        <div className="flex justify-between items-center">
+          <p className="text-base font-medium md:text-lg text-neutral-200">
+            More options (Pick an Image, Change Image Position)
+          </p>
+          <img
+            src="/chevron-light.svg"
+            className={`w-4 md:w-5 transform origin-center transition duration-300 ease-out
+                ${accordionToggle && "rotate-180"}
+                `}
+          />
+        </div>
+        <div
+          className={`h-fit justify-between items-center mt-5 gap-5 flex-col sm:flex-row
+          ${accordionToggle ? "flex" : "hidden"}
+          }`}>
+          <p className="grow-0 shrink-0 text-neutral-200 text-base md:text-lg">
+            Change Image Position
+          </p>
+          <input
+            type="range"
+            min={-1}
+            max={1}
+            value={sliderValue}
+            onChange={(e) => setSliderValue(parseFloat(e.target.value))}
+            step={0.01}
+            className="grow shrink w-full accent-blue-400"
+          />
+        </div>
       </button>
     </div>
   );
