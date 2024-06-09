@@ -5,6 +5,8 @@ export default function Footer() {
         Made with {"<3"} by{" "}
         <a
           href="https://letterboxd.com/kenough_"
+          target="blank"
+          rel="_noreferrer"
           className="text-blue-400">
           @kenough_
         </a>{" "}
