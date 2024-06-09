@@ -39,6 +39,8 @@ export default function ImageViewer({
   const searchParams = useSearchParams();
   const queryURL = searchParams.get("url");
 
+  const [sliderValue, setSliderValue] = useState<number>(0);
+
   function fetcher(url: string) {
     return new Promise<ApiData | ApiDataError>((resolve, reject) => {
       setIsFetching(true);
@@ -139,6 +141,7 @@ export default function ImageViewer({
         apiData={apiData}
         myRef={myRef}
         curImgNum={curImgNum}
+        sliderValue={sliderValue}
       />
       <div className="mt-5">
         <p
@@ -170,6 +173,14 @@ export default function ImageViewer({
           </button>
         </div>
       </div>
+      <input
+        type="range"
+        min={-1}
+        max={1}
+        value={sliderValue}
+        onChange={(e) => setSliderValue(parseFloat(e.target.value))}
+        step={0.01}
+      />
       <button
         className="bg-blue-400 px-4 text-neutral-900 font-bold text-base rounded-full mt-5 w-fit py-3 self-center md:text-xl"
         onClick={async () => {
