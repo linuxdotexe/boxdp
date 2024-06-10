@@ -229,8 +229,12 @@ export default function ImageViewer({
               value={sliderValue}
               onChange={(e) => setSliderValue(parseFloat(e.target.value))}
               step={0.01}
+              list="markers"
               className="grow shrink w-full accent-blue-400"
             />
+            <datalist id="markers">
+              <option value="0"></option>
+            </datalist>
           </div>
         </div>
       </button>
