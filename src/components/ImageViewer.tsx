@@ -15,6 +15,7 @@ import ApiDataError from "@/utils/ApiDataError";
 import LoadingImageViewer from "./LoadingImageViewer";
 import ErrorImageViewer from "./ErrorImageViewer";
 import DefaultReviewStyle from "./DefaultReviewStyle";
+import Link from "next/link";
 
 interface ImageViewerProps {
   queryURL?: string | null;
@@ -41,7 +42,6 @@ export default function ImageViewer({
 
   const [sliderValue, setSliderValue] = useState<number>(0);
   const [accordionToggle, setAccordionToggle] = useState<boolean>(false);
-  console.log(accordionToggle);
 
   function fetcher(url: string) {
     return new Promise<ApiData | ApiDataError>((resolve, reject) => {
@@ -152,28 +152,41 @@ export default function ImageViewer({
           Pick an Image
         </p>
         <div className="flex flex-row gap-6 justify-center items-center mt-2">
-          <button
-            className="px-8 py-2 rounded-full bg-blue-400
+          <Link
+            href={`/?url=${queryURL}&img=${Math.max(curImgNum - 1, 1)}`}
+            scroll={false}
+            prefetch>
+            <button
+              className="px-8 py-2 rounded-full bg-blue-400
             disabled:bg-neutral-600 "
-            title="prev"
-            disabled={curImgNum === 1}
-            onClick={handleImgNumDecr}>
-            <img
-              src="/chevron-right-solid.svg"
-              className="w-4 rotate-180"></img>
-          </button>
+              title="prev"
+              disabled={curImgNum === 1}
+              onClick={handleImgNumDecr}>
+              <img
+                src="/chevron-right-solid.svg"
+                className="w-4 rotate-180"></img>
+            </button>
+          </Link>
           <p className="text-center self-center border-2 px-3 py-3 border-blue-400 text-neutral-300 rounded-xl text-xl font-bold md:text-2xl">
             {curImgNum} / {apiData.images.length}
           </p>
-          <button
-            className="px-8 py-2 rounded-full bg-blue-400 disabled:bg-neutral-600 "
-            title="next"
-            disabled={curImgNum === apiData.images.length}
-            onClick={handleImgNumIncr}>
-            <img
-              src="/chevron-right-solid.svg"
-              className="w-4"></img>
-          </button>
+          <Link
+            href={`/?url=${queryURL}&img=${Math.min(
+              curImgNum + 1,
+              apiData.images.length || 1
+            )}`}
+            scroll={false}
+            prefetch>
+            <button
+              className="px-8 py-2 rounded-full bg-blue-400 disabled:bg-neutral-600 "
+              title="next"
+              disabled={curImgNum === apiData.images.length}
+              onClick={handleImgNumIncr}>
+              <img
+                src="/chevron-right-solid.svg"
+                className="w-4"></img>
+            </button>
+          </Link>
         </div>
       </div>
       <button
@@ -209,15 +222,19 @@ export default function ImageViewer({
           <p className="grow-0 shrink-0 text-neutral-200 text-base md:text-lg">
             Change Image Position
           </p>
-          <input
-            type="range"
-            min={-1}
-            max={1}
-            value={sliderValue}
-            onChange={(e) => setSliderValue(parseFloat(e.target.value))}
-            step={0.01}
-            className="grow shrink w-full accent-blue-400"
-          />
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full">
+            <input
+              type="range"
+              min={-1}
+              max={1}
+              value={sliderValue}
+              onChange={(e) => setSliderValue(parseFloat(e.target.value))}
+              step={0.01}
+              className="grow shrink w-full accent-blue-400"
+            />
+          </div>
         </div>
       </button>
     </div>
