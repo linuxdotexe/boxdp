@@ -5,12 +5,14 @@ interface ReviewStyleProps {
   myRef: React.MutableRefObject<HTMLCanvasElement | null>;
   curImgNum: number;
   apiData: ApiData;
+  sliderValue: number;
 }
 
 export default function DefaultReviewStyle({
   myRef,
   curImgNum,
   apiData,
+  sliderValue,
 }: ReviewStyleProps) {
   const canvasRef = myRef;
 
@@ -127,8 +129,12 @@ export default function DefaultReviewStyle({
         );
         const newWidth = img.width * scaleFactor;
         const newHeight = img.height * scaleFactor;
-        const x = canvas.width / 2 - newWidth / 2;
+        // const x = canvas.width / 2 - newWidth / 2;
+        const maxOffset = Math.max(0, newWidth - canvas.width) / 2;
+
+        const x = canvas.width / 2 - newWidth / 2 + sliderValue * maxOffset;
         const y = canvas.height / 2 - newHeight / 2;
+        // ctx.drawImage(img, -sliderValue * 720, y, newWidth, newHeight);
         ctx.drawImage(img, x, y, newWidth, newHeight);
       };
 
@@ -302,7 +308,7 @@ export default function DefaultReviewStyle({
     };
 
     loadFonts();
-  }, [curImgNum, apiData, canvasRef]);
+  }, [curImgNum, apiData, canvasRef, sliderValue]);
 
   return (
     <div className="w-full aspect-square m-auto rounded-xl overflow-hidden">
