@@ -153,44 +153,41 @@ export default function ImageViewer({
         </p>
         <div className="flex flex-row gap-6 justify-center items-center mt-2">
           <Link
+            className={`px-8 py-2 rounded-full bg-blue-400 select-none
+            ${curImgNum === 1 ? "pointer-events-none bg-neutral-600" : ""}`}
             href={`/?url=${queryURL}&img=${Math.max(curImgNum - 1, 1)}`}
             scroll={false}
+            aria-disabled={curImgNum === 1}
             prefetch>
-            <button
-              className="px-8 py-2 rounded-full bg-blue-400
-            disabled:bg-neutral-600 "
-              title="prev"
-              disabled={curImgNum === 1}
-              onClick={handleImgNumDecr}>
-              <img
-                src="/chevron-right-solid.svg"
-                className="w-4 rotate-180"></img>
-            </button>
+            <img
+              alt="prev"
+              src="/chevron-right-solid.svg"
+              className="w-4 rotate-180"></img>
           </Link>
-          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 text-neutral-300 rounded-xl text-xl font-bold md:text-2xl">
+          <p className="text-center self-center border-2 px-3 py-3 border-blue-400 text-neutral-300 rounded-xl text-xl font-bold md:text-2xl select-none">
             {curImgNum} / {apiData.images.length}
           </p>
           <Link
+            className={`px-8 py-2 rounded-full bg-blue-400 select-none ${
+              curImgNum === apiData.images.length
+                ? "pointer-events-none bg-neutral-600"
+                : ""
+            }`}
             href={`/?url=${queryURL}&img=${Math.min(
               curImgNum + 1,
               apiData.images.length || 1
             )}`}
             scroll={false}
             prefetch>
-            <button
-              className="px-8 py-2 rounded-full bg-blue-400 disabled:bg-neutral-600 "
-              title="next"
-              disabled={curImgNum === apiData.images.length}
-              onClick={handleImgNumIncr}>
-              <img
-                src="/chevron-right-solid.svg"
-                className="w-4"></img>
-            </button>
+            <img
+              alt="next"
+              src="/chevron-right-solid.svg"
+              className="w-4"></img>
           </Link>
         </div>
       </div>
       <button
-        className="bg-blue-400 px-4 text-neutral-900 font-bold text-base rounded-full mt-5 w-fit py-3 self-center md:text-xl"
+        className="bg-blue-400 px-4 text-neutral-900 font-bold text-base rounded-full mt-5 w-fit py-3 self-center md:text-xl select-none"
         onClick={async () => {
           if (!myRef.current) return;
           const link = document.createElement("a");
@@ -201,7 +198,7 @@ export default function ImageViewer({
         Download!
       </button>
       <button
-        className={`bg-neutral-900 w-full text-left py-4 px-6 mt-5
+        className={`bg-neutral-900 w-full text-left py-4 px-6 mt-5 select-none
         cursor-pointer ${accordionToggle ? "rounded-3xl" : "rounded-full"}`}
         onClick={(e) => setAccordionToggle(!accordionToggle)}>
         <div className="flex justify-between items-center">
