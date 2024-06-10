@@ -29,7 +29,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
     blink: "",
   });
 
-  const [submitted, setSubmitted] = useState(false);
+  // const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,8 +40,8 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
       // reject
       return;
     }
-    router.push(`/?url=${url}&img=1#review`, { scroll: true });
-    setSubmitted(true);
+    router.push(`/?url=${url}&img=1`);
+    // setSubmitted(true);
 
     // console.log(BASE_URL + url);
     // setQueryURL(BASE_URL + url);
@@ -50,7 +50,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
 
   const handleClear = () => {
     setFormData({ blink: "" });
-    setSubmitted(false);
+    // setSubmitted(false);
   };
 
   // Event handler to update form data on input change
@@ -61,7 +61,7 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
       [name]: value,
     }));
     if (value.trim() === "") {
-      setSubmitted(false);
+      // setSubmitted(false);
     }
   };
 
@@ -82,7 +82,10 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
         placeholder="Paste your link here."
       />
       <button
-        className="bg-neutral-900 text-neutral-400 font-medium pr-10 pl-5 py-3 md:py-3.5 text-xl md:text-2xl"
+        className={`bg-neutral-900 text-neutral-400 font-medium pr-10 pl-5
+          py-3 md:py-3.5 text-xl md:text-2xl ${
+            formData.blink === "" ? "hidden" : ""
+          }`}
         type="button"
         onClick={handleClear}
         disabled={isFetching}>
@@ -100,24 +103,6 @@ export default function SearchBox({ isFetching }: SearchBoxProps) {
         disabled={isFetching}>
         Submit!
       </button>
-      {/* // ! remove after verifying working of the new clear button */}
-      {/* {submitted ? (
-        <button
-          className="bg-red-400 text-neutral-900 font-bold px-5 h-[49.5px]
-          py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative"
-          type="button"
-          onClick={handleClear}>
-          Clear
-        </button>
-      ) : (
-        <button
-          className="bg-blue-400 text-neutral-900 font-bold px-5 h-[49.5px]
-          py-3 rounded-full text-base md:text-lg md:top-[21px] top-[19px] right-3 md:right-5 relative disabled:bg-neutral-600 disabled:text-neutral-100"
-          type="submit"
-          disabled={isFetching}>
-          Submit!
-        </button>
-      )} */}
     </form>
   );
 }
