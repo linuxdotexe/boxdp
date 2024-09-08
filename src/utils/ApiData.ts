@@ -11,4 +11,5 @@ export default interface ApiData {
     directors: Array<string>,
     images: Array<string>,
     datePublished: string,
+    avatar: string,
 };

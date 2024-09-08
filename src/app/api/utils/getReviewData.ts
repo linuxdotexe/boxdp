@@ -20,13 +20,23 @@ interface TmdbBackdrop {
 function getScrapedData(res: AxiosResponse<any, any>) {
   const $ = cheerio.load(res.data);
   const scriptTagText = $('script[type="application/ld+json"]').text();
-  const film_year_scrape = $(".film-title-wrapper > small").text();
+  const film_year = $(".film-title-wrapper > small").text();
   const { openBrace, closeBrace } = getOpenCloseBraces(scriptTagText);
   const data: LetterboxdData = makeJson(
     scriptTagText.slice(openBrace, closeBrace + 1)
   );
-  data.film_year = film_year_scrape;
-  return { ...data, film_year: film_year_scrape };
+  const avatar_url = new URL($("a.avatar.-a24 > img").attr("src") as string);
+  avatar_url.searchParams.delete("v");
+  let avatar = "";
+  if (avatar_url.hostname !== "s.ltrbxd.com") {
+    // not static avatar i.e. not default pic
+    let path_parts = avatar_url.pathname.split("/");
+    path_parts.pop();
+    path_parts.push("avtr-0-220-0-220-crop.jpg");
+    avatar_url.pathname = path_parts.join("/");
+  }
+  avatar = avatar_url.toString();
+  return { ...data, film_year, avatar, };
 }
 
 async function getImages(url: string) {
@@ -165,6 +175,7 @@ export default async function getReviewData(req_url: string) {
     datePublished: data.datePublished,
     directors: data.itemReviewed.director.map((item) => item.name),
     images,
+    avatar: data.avatar,
   };
   return apiData;
 }
