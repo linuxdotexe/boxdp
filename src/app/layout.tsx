@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Karla } from "next/font/google";
 import "./globals.css";
-
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
@@ -11,6 +10,9 @@ export const metadata: Metadata = {
   title: "boxd-pics",
   description:
     "Get a prettier image of your letterboxd review. Just provide the URL.",
+  openGraph: {
+    images: ["/og.png"],
+  },
 };
 
 const fh: React.CSSProperties = {
@@ -26,12 +28,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="scroll-smooth">
+      className="scroll-smooth"
+    >
       {/* <body className={inter.className}> */}
       <body>
         <div
           className="flex flex-col h-screen justify-between"
-          style={fh}>
+          style={fh}
+        >
           <Header />
           <div className="mb-auto">{children}</div>
           <Footer />
