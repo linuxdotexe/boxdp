@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Get a prettier image of your letterboxd review. Just provide the URL.",
   openGraph: {
-    images: ["/og.png"],
+    images: ["https://boxdp.vercel.app/og.png"],
   },
 };
 
