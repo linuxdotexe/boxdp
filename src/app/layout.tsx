@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   title: "boxd-pics",
   description:
     "Get a prettier image of your letterboxd review. Just provide the URL.",
-  openGraph: {
-    images: ["https://boxdp.vercel.app/og.png"],
-  },
+  // openGraph: {
+  //   images: ["https://boxdp.vercel.app/og.png"],
+  // },
 };
 
 const fh: React.CSSProperties = {
