@@ -3,13 +3,12 @@ import { useRouter } from "next/navigation";
 
 import ApiData from "@/utils/ApiData";
 import {
-  RefObject,
-  ReactInstance,
   useState,
   Dispatch,
   SetStateAction,
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 import ApiDataError from "@/utils/ApiDataError";
 import LoadingImageViewer from "./LoadingImageViewer";
@@ -43,7 +42,7 @@ export default function ImageViewer({
   const [sliderValue, setSliderValue] = useState<number>(0);
   const [accordionToggle, setAccordionToggle] = useState<boolean>(false);
 
-  function fetcher(url: string) {
+  const fetcher = useCallback(function fetcher(url: string) {
     return new Promise<ApiData | ApiDataError>((resolve, reject) => {
       setIsFetching(true);
       fetch(url, { method: "GET" })
@@ -63,7 +62,7 @@ export default function ImageViewer({
           reject(error as ApiDataError);
         });
     });
-  }
+  }, [setIsFetching]);
 
   useEffect(() => {
     if (queryURL === null) {
@@ -85,7 +84,7 @@ export default function ImageViewer({
     return () => {
       console.log("cleanup");
     };
-  }, [queryURL]);
+  }, [queryURL, fetcher]);
 
   if (isFetching) {
     return <LoadingImageViewer />;

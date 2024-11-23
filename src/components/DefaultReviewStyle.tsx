@@ -1,5 +1,6 @@
 import ApiData from "@/utils/ApiData";
-import { useEffect, useRef } from "react";
+import { SatoriParams } from "@/utils/TemplateProps";
+import { useCallback, useEffect } from "react";
 
 interface ReviewStyleProps {
   myRef: React.MutableRefObject<HTMLCanvasElement | null>;
@@ -15,6 +16,26 @@ export default function DefaultReviewStyle({
   sliderValue,
 }: ReviewStyleProps) {
   const canvasRef = myRef;
+  const params: SatoriParams = {
+    director: apiData.directors.join(", "),
+    filmName: apiData.filmName,
+    filmYear: apiData.filmYear,
+    image: apiData.images[curImgNum],
+    reviewerId: apiData.reviewerId,
+    reviewerName: apiData.reviewerName,
+    reviewRating: apiData.reviewRating,
+    reviewContent: apiData.reviewContent,
+    haveAvatar: false,
+    haveBg: false,
+    haveTitle: true,
+  };
+  const searchParams = new URLSearchParams(
+    Object.keys(params).map((item) => [
+      item,
+      String(params[item as keyof SatoriParams]),
+    ])
+  );
+  const topGurl = "/api/satori?" + searchParams.toString();
 
   useEffect(() => {
     const loadFonts = async () => {
@@ -56,9 +77,11 @@ export default function DefaultReviewStyle({
       let content = `${apiData?.reviewContent}`;
       if (content.split(" ").length > 50) {
         if (content.includes("\n")) {
-          content = content.split(" ").splice(0, 50).join(" ") + " [...]";
+          content =
+            content.split(" ").splice(0, 50).join(" ") + " [...]";
         } else {
-          content = content.split(" ").splice(0, 70).join(" ") + " [...]";
+          content =
+            content.split(" ").splice(0, 70).join(" ") + " [...]";
         }
       }
 
@@ -132,13 +155,16 @@ export default function DefaultReviewStyle({
         // const x = canvas.width / 2 - newWidth / 2;
         const maxOffset = Math.max(0, newWidth - canvas.width) / 2;
 
-        const x = canvas.width / 2 - newWidth / 2 + sliderValue * maxOffset;
+        const x =
+          canvas.width / 2 - newWidth / 2 + sliderValue * maxOffset;
         const y = canvas.height / 2 - newHeight / 2;
         // ctx.drawImage(img, -sliderValue * 720, y, newWidth, newHeight);
         ctx.drawImage(img, x, y, newWidth, newHeight);
       };
 
-      const contentContainer = (ctx: CanvasRenderingContext2D): void => {
+      const contentContainer = (
+        ctx: CanvasRenderingContext2D
+      ): void => {
         (ctx as any).roundRect = function (
           x: number,
           y: number,
@@ -246,14 +272,22 @@ export default function DefaultReviewStyle({
         const box = new Image();
         box.crossOrigin = "anonymous";
         box.onload = function () {
-          ctx.drawImage(box, canvas.width - 258.54, canvas.height - footerH);
+          ctx.drawImage(
+            box,
+            canvas.width - 258.54,
+            canvas.height - footerH
+          );
         };
         box.src = "/letterboxd.svg";
 
         const logo = new Image();
         logo.crossOrigin = "anonymous";
         logo.onload = function () {
-          ctx.drawImage(logo, canvas.width / 2 - 30, canvas.height - 75);
+          ctx.drawImage(
+            logo,
+            canvas.width / 2 - 30,
+            canvas.height - 75
+          );
         };
         logo.src = "/logo.svg";
       };
@@ -309,7 +343,7 @@ export default function DefaultReviewStyle({
 
     loadFonts();
   }, [curImgNum, apiData, canvasRef, sliderValue]);
-
+  // <img src={topGurl} alt="dasf" width={1080} height={1080} />
   return (
     <div className="w-full aspect-square m-auto rounded-xl overflow-hidden">
       <canvas
