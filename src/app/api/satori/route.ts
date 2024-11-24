@@ -7,6 +7,8 @@ import sharp from "sharp";
 import axios from "axios";
 import { TemplateProps } from "@/utils/TemplateProps";
 
+export const dynamic = "force-dynamic"; // defaults to auto
+
 // Function to get image brightness
 async function getImageBrightness(imageUrl: string): Promise<number> {
   try {
@@ -25,8 +27,7 @@ async function getImageBrightness(imageUrl: string): Promise<number> {
       totalBrightness += data[i];
     }
 
-    const avgBrightness =
-      totalBrightness / (info.width * info.height);
+    const avgBrightness = totalBrightness / (info.width * info.height);
     const brightness = Math.round((avgBrightness / 255) * 100);
     return brightness;
   } catch (error) {
@@ -49,20 +50,14 @@ async function getPngBuffer(searchParams: URLSearchParams) {
     reviewContent: searchParams.get("reviewContent") as string,
     reviewRating: Number(searchParams.get("reviewRating")) as number,
     userImage: searchParams.get("userImage") as string,
-    haveAvatar:
-      searchParams.get("haveAvatar") === "true" ? true : false,
-    haveTitle:
-      searchParams.get("haveTitle") === "true" ? true : false,
+    haveAvatar: searchParams.get("haveAvatar") === "true" ? true : false,
+    haveTitle: searchParams.get("haveTitle") === "true" ? true : false,
     haveBg: searchParams.get("haveBg") === "true" ? true : false,
     brightness: brightness as number,
     director: searchParams.get("director") as string,
   };
-  const fontRegular = await fs.readFile(
-    "./public/fonts/Karla-Regular.ttf"
-  );
-  const fontMedium = await fs.readFile(
-    "./public/fonts/Karla-Medium.ttf"
-  );
+  const fontRegular = await fs.readFile("./public/fonts/Karla-Regular.ttf");
+  const fontMedium = await fs.readFile("./public/fonts/Karla-Medium.ttf");
   const fontBold = await fs.readFile("./public/fonts/Karla-Bold.ttf");
   const svg = await satori(React.createElement(NewTemplate, props), {
     width: 1080,
@@ -94,9 +89,7 @@ async function getPngBuffer(searchParams: URLSearchParams) {
 
 export async function GET(request: NextRequest) {
   try {
-    const pngBuffer = await getPngBuffer(
-      request.nextUrl.searchParams
-    );
+    const pngBuffer = await getPngBuffer(request.nextUrl.searchParams);
     return new NextResponse(pngBuffer, {
       headers: {
         "Content-Type": "image/png",
