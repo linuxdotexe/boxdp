@@ -56,9 +56,9 @@ async function getPngBuffer(searchParams: URLSearchParams) {
     brightness: brightness as number,
     director: searchParams.get("director") as string,
   };
-  const fontRegular = await fs.readFile("./public/fonts/Karla-Regular.ttf");
-  const fontMedium = await fs.readFile("./public/fonts/Karla-Medium.ttf");
-  const fontBold = await fs.readFile("./public/fonts/Karla-Bold.ttf");
+  const fontRegular = await fs.readFile("public/fonts/Karla-Regular.ttf");
+  const fontMedium = await fs.readFile("public/fonts/Karla-Medium.ttf");
+  const fontBold = await fs.readFile("public/fonts/Karla-Bold.ttf");
   const svg = await satori(React.createElement(NewTemplate, props), {
     width: 1080,
     height: 1080,
