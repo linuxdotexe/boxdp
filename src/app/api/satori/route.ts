@@ -36,7 +36,10 @@ async function getImageBrightness(imageUrl: string): Promise<number> {
   }
 }
 
-async function getPngBuffer(searchParams: URLSearchParams) {
+async function getPngBuffer(
+  searchParams: URLSearchParams,
+  request: NextRequest
+) {
   const brightness = await getImageBrightness(
     searchParams.get("image") as string
   );
@@ -56,9 +59,17 @@ async function getPngBuffer(searchParams: URLSearchParams) {
     brightness: brightness as number,
     director: searchParams.get("director") as string,
   };
-  const fontRegular = await fs.readFile("public/fonts/Karla-Regular.ttf");
-  const fontMedium = await fs.readFile("public/fonts/Karla-Medium.ttf");
-  const fontBold = await fs.readFile("public/fonts/Karla-Bold.ttf");
+  const fontRegular = await fetch(
+    new URL("/fonts/Karla-Regular.ttf", request.nextUrl.origin).toString()
+  ).then((res) => res.arrayBuffer());
+
+  const fontMedium = await fetch(
+    new URL("/fonts/Karla-Medium.ttf", request.nextUrl.origin).toString()
+  ).then((res) => res.arrayBuffer());
+
+  const fontBold = await fetch(
+    new URL("/fonts/Karla-Bold.ttf", request.nextUrl.origin).toString()
+  ).then((res) => res.arrayBuffer());
   const svg = await satori(React.createElement(NewTemplate, props), {
     width: 1080,
     height: 1080,
@@ -89,7 +100,7 @@ async function getPngBuffer(searchParams: URLSearchParams) {
 
 export async function GET(request: NextRequest) {
   try {
-    const pngBuffer = await getPngBuffer(request.nextUrl.searchParams);
+    const pngBuffer = await getPngBuffer(request.nextUrl.searchParams, request);
     return new NextResponse(pngBuffer, {
       headers: {
         "Content-Type": "image/png",
