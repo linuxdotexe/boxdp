@@ -20,7 +20,7 @@ interface TmdbBackdrop {
 function getScrapedData(res: AxiosResponse<any, any>) {
   const $ = cheerio.load(res.data);
   const scriptTagText = $('script[type="application/ld+json"]').text();
-  const film_year = $(".film-title-wrapper > small").text();
+  const film_year = $(".releasedate > a").text();
   const { openBrace, closeBrace } = getOpenCloseBraces(scriptTagText);
   const data: LetterboxdData = makeJson(
     scriptTagText.slice(openBrace, closeBrace + 1)
